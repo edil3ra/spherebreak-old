@@ -1,13 +1,7 @@
 module Main exposing (..)
-
-
-{-| This library fills a bunch of important niches in Elm. A `Maybe` can help
-you with optional arguments, error handling, and records with optional fields.
--}
-
-
 import Html
 import Html exposing (div, text, program)
+
 
 
 type alias Model = {
@@ -20,7 +14,7 @@ type Msg = Noop
 
 
 init: (Model, Cmd Msg)
-init = ( Model "hello" , Cmd.none)
+init = (Model "hello" , Cmd.none)
 
 
     
@@ -58,3 +52,4 @@ main =
     , subscriptions = subscriptions
     , view = view
     }
+
