@@ -143,45 +143,6 @@ tupleSumCoinsSumCore coins =
         ( entriesBorderSumNumber, coreNumber )
 
 
-isMultiple : Coins -> Bool
-isMultiple coins =
-    let
-        ( x, y ) =
-            tupleSumCoinsSumCore coins
-    in
-        x % y == 0
-
-
-isAliveMatch : Coins -> Int -> Bool
-isAliveMatch coins number =
-    let
-        fnCountAlives fnFilter =
-            coins
-                |> fnFilter
-                |> Array.filter .alive
-                |> Array.length
-    in
-        (fnCountAlives entries) + (fnCountAlives borders) == number
-
-
-multipleFactor : Coins -> Maybe Int
-multipleFactor coins =
-    let
-        ( x, y ) =
-            tupleSumCoinsSumCore coins
-
-        factor =
-            x // y
-
-        isMultiple =
-            x % y == 0
-    in
-        case isMultiple of
-            True ->
-                Just factor
-
-            False ->
-                Nothing
 
 
 aliveBorders : Coins -> BordersCoin
@@ -201,11 +162,11 @@ incrementBordersNumber coins =
         
 incrementBordersCounter : BordersCoin -> BordersCoin
 incrementBordersCounter coins =
-    coins |> Array.map (\coin -> { coin | number = coin.counter + 1 })
+    coins |> Array.map (\coin -> { coin | counter = coin.counter + 1 })
 
 
-resetBorderNumber : BordersCoin -> BordersCoin
-resetBorderNumber coins =
+resetBordesrNumber : BordersCoin -> BordersCoin
+resetBordersNumber coins =
     let
         fn coin =
             if coin.number <= max_number then
@@ -216,8 +177,8 @@ resetBorderNumber coins =
         coins |> Array.map fn
 
             
-resetBorderCounter : BordersCoin -> BordersCoin
-resetBorderCounter coins =
+resetBordersCounter : BordersCoin -> BordersCoin
+resetBordersCounter coins =
     let
         fn coin =
             if coin.counter <= max_counter then
@@ -228,28 +189,3 @@ resetBorderCounter coins =
         coins |> Array.map fn
             
 
-nextTurn : Coins -> Coins
-nextTurn coins =
-    let
-        coreCoin =
-            core coins
-
-        entriesCoin =
-            entries coins |> Array.toList |> List.map (\x -> Entry x)
-
-        bordersCoin =
-            borders coins |> Array.toList
-
-        bordersIncremented =
-            bordersCoin
-                |> List.map (\b -> { b | number = b.number + 1 })
-
-        bordersFiltred =
-            bordersIncremented
-                |> List.map (\b -> { b | alive = b.number <= max_number })
-
-        bordersNew =
-            bordersFiltred
-                |> List.map (\x -> Border x)
-    in
-        [ Core coreCoin ] ++ entriesCoin ++ bordersNew |> Array.fromList

@@ -187,40 +187,6 @@ tupleSumCoinsSumCoreTest =
         ]
 
 
-isMultipleTest =
-    describe "isMultiple"
-        [ test "output is True  when input is coinsFixture" <|
-            \() ->
-                isMultiple coinsFixture |> Expect.equal True
-        , test "output False when input is coinsFixture2" <|
-            \() ->
-                isMultiple coinsFixture2 |> Expect.equal False
-        ]
-
-
-isAliveMatchTest =
-    describe "isAliveMatch"
-        [ test "output is True  when input is coinsFixture and 10" <|
-            \() ->
-                isAliveMatch coinsFixture 14 |> Expect.equal True
-        , test "output is True  when input is coinsFixture and 1" <|
-            \() ->
-                isAliveMatch coinsFixture 1 |> Expect.equal False
-        ]
-
-
-multipleFactorTest =
-    describe "multipleFactorTest"
-        [ test "output is Just 14 when input is coinsFixture" <|
-            \() ->
-                multipleFactor coinsFixture |> Expect.equal (Just 14)
-        , test "output in Nothing when input is coinsFixture2" <|
-            \() ->
-                multipleFactor coinsFixture2 |> Expect.equal Nothing
-        ]
-
-
-
 aliveBordersTest =
     describe "aliveBorders"
         [ test "output is BorderCoins [coinBorder1, coinBorder2, coinBorder3, coinBorder3] when input is coinFixture2" <|
@@ -237,17 +203,8 @@ deadBordersTest =
         ]
 
 
-incrementBordersNumber =
-    describe "incrementBordersNumber"
-        [ test "output is "]
         
-        
-nextTurnTest =
-    describe "nextTurnTest"
-        [ test "output is coinsFixture3 when input is coinFixture2" <|
-            \() ->
-                nextTurn coinsFixture2 |> Expect.equal coinsFixture3
-        ]
+
 
         
 main =
@@ -259,10 +216,6 @@ main =
             , sumCoinsTest
             , sumCoreTest
             , tupleSumCoinsSumCoreTest
-            , isMultipleTest
-            , isAliveMatchTest
-            , multipleFactorTest
             , deadBordersTest
             , aliveBordersTest
-            -- , nextTurnTest
             ]

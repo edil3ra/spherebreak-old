@@ -1,0 +1,136 @@
+* Coin
+** models
+*** CoreCoin
+****  type alias
+    number: Int
+**** description
+   + main coin
+   + the number that the player must obtained in order to earn points
+   + unique, it can only have one coreCoin
+   + randomly change every turn
+   + center of the game
+*** EntryCoin alias
+**** model type alias
+    number: Int
+    alive: Bool
+**** descrpiton
+   + number cannot be change
+   + used in order to to reach the CoreCoin number
+   + die after used
+   + reset after the turn is over
+   + middle of the game
+*** BorderCoin
+**** model type alias
+    number: Int
+    alive: Bool
+    counter: Int
+**** description
+   + border of the game
+   + used in order to reach the CoreCoin number
+   + die after used
+   + reset after the counter has reach a given number
+   + die if the number is greater than a given number
+   + border of the game
+*** Coin
+**** model type
+   Core CoreCoin
+   Entry EntryCoin
+   Border BorderCoin
+**** description
+
+*** Coins
+**** model type alias
+    Array  Coin
+
+**** description
+
+
+
+
+* Player
+** model
+  + Player: type alias
+  + hand: List Int
+  + currentPoint: Int
+  + maxPoint: Int
+  + comboMultiple: Maybe Int
+  + comboSum: Maybe Int
+  + comboLength: Int
+
+** functions
+  + sumHand -> number
+  + countHand -> number
+  + addHand -> number -> Player (add number to head)
+  + resetHand -> Player (empty hand)
+  + addPoint -> Player (update currentPoint with hand and combo)
+    
+* Main
+** models
+*** difficultly Type
+    easy
+    medium
+    hard  
+
+*** model alias
+    difficutly: Difficulty
+    coins: Coins
+    player: Player
+    goal: Int
+    currentTurn: Int
+    maxTurn: Int
+    currentTime: Int
+    maxTime: Int
+
+** actions 
+*** commands
+   + Noop
+   + Random (get a random number)
+   + Win
+     + when :: player.point >= goal
+     + trigger reset
+
+   + Lose
+     + when :: currentTurn >= maxTurn
+     + trigger reset
+
+   + Reset 
+     + when :: Lose || Win
+     + reset borders counter
+     + randomize the borders
+
+   + NextTurn 
+     + when :: currentTime >= maxTime || Hit Coin
+       + increment bordersCell counter
+       + increment bordersCell number
+       + kill bordersCell >= max_number
+       + revive bordersCell >= max_counter
+       + randomize bordersCell >= max_counter
+       + randomize CoreCoin
+       + incrementCurrentTurn
+       + reset the currentTime
+     + when :: currentTurn >= maxTurn
+       + trigger Lose        
+
+   + Hit Coin 
+     + when :: coin is dead
+       + Nopp 
+     + when :: coin is alive
+       + add number in the hand player
+       + kill the coin
+       + when :: sum player == factor of core coin
+         + addPoint to player
+         + when :: player.point >= goal
+           trigger Win
+
+
+*** subscriptions
+   + Time
+   + when :: every seconds
+     increment currentTime
+
+
+* Board
+  drawCoins -> alive -> number -> Msg -> Html Msg
+  drawInfoPlayer -> currentTime -> currentTurn -> comboType -> Html Msg
+  drawInfoGame -> maxTime -> maxTurn -> difficutly -> goal -> Html Msg
+  
