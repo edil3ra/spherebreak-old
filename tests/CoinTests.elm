@@ -4,218 +4,157 @@ import Test exposing (describe, test)
 import Expect
 import Test.Runner.Html exposing (run)
 import Coin exposing (..)
-import Array
 import Debug
 
 
-coinCore1 =
-    (CoreCoin 4)
+coreFixture1 : Coin
+coreFixture1 =
+    Core (CoreCoin 1)
 
 
-coinEntry1 =
-    (EntryCoin 1 True)
+coreFixture2 : Coin
+coreFixture2 =
+    Core (CoreCoin 2)
 
 
-coinEntry2 =
-    (EntryCoin 2 True)
+entryFixture1 : Coin
+entryFixture1 =
+    Entry (EntryCoin 1 True)
 
 
-coinEntry3 =
-    (EntryCoin 3 True)
+entryFixture2 : Coin
+entryFixture2 =
+    Entry (EntryCoin 1 False)
 
 
-coinEntry4 =
-    (EntryCoin 4 True)
+borderFixture1 : Coin
+borderFixture1 =
+    Border (BorderCoin 1 True 1)
 
 
-coinBorder1 =
-    (BorderCoin 1 True min_counter)
+borderFixture2 : Coin
+borderFixture2 =
+    Border (BorderCoin 1 False 1)
 
 
-coinBorder2 =
-    (BorderCoin 2 True min_counter)
-
-
-coinBorder3 =
-    (BorderCoin 3 True min_counter)
-
-
-coinBorder4 =
-    (BorderCoin 4 True min_counter)
-
-
-coinBorder5 =
-    (BorderCoin 5 True min_counter)
-
-
-coinBorder6 =
-    (BorderCoin 6 True min_counter)
-
-
-coinBorder7 =
-    (BorderCoin 7 True min_counter)
-
-
-coinBorder8 =
-    (BorderCoin 8 True min_counter)
-
-
-coinBorder9 =
-    (BorderCoin 9 True min_counter)
-
-
-coinBorder10 =
-    (BorderCoin 1 True min_counter)
-
-
-coinBorder11 =
-    (BorderCoin 0 False max_counter)
-
-
-coinBorder12 =
-    (BorderCoin 9 False max_counter)
-
-
-coinsFixture : Coins
-coinsFixture =
-    Array.fromList
-        [ Core coinCore1
-        , Entry coinEntry1
-        , Entry coinEntry2
-        , Entry coinEntry3
-        , Entry coinEntry4
-        , Border coinBorder1
-        , Border coinBorder2
-        , Border coinBorder3
-        , Border coinBorder4
-        , Border coinBorder5
-        , Border coinBorder6
-        , Border coinBorder7
-        , Border coinBorder8
-        , Border coinBorder9
-        , Border coinBorder10
-        , Border coinBorder11
-        , Border coinBorder12
-        ]
-
-
-coinsFixture2 : Coins
-coinsFixture2 =
-    Array.fromList
-        [ Core coinCore1
-        , Entry coinEntry1
-        , Entry coinEntry2
-        , Entry coinEntry3
-        , Entry coinEntry4
-        , Border coinBorder1
-        , Border coinBorder2
-        , Border coinBorder3
-        , Border coinBorder3
-        , Border coinBorder11
-        ]
-
-
-coinsFixture3 : Coins
-coinsFixture3 =
-    Array.fromList
-        [ Core coinCore1
-        , Entry coinEntry1
-        , Entry coinEntry2
-        , Entry coinEntry3
-        , Entry coinEntry4
-        , Border coinBorder2
-        , Border coinBorder3
-        , Border coinBorder4
-        , Border coinBorder4
-        , Border coinBorder11
-        ]
-
-
-coreTest =
-    describe "coins"
-        [ test "output is coinCore1 when input is coinsFixture" <|
+valueTest =
+    describe "value"
+        [ test "output is 1 when input is coreFixture" <|
             \() ->
-                core coinsFixture |> Expect.equal coinCore1
-        ]
-
-
-entriesTest =
-    describe "entries"
-        [ test "output is [coinEntry1, coinEntry2, coinEntry3, coinEntry4] when input is coinsFixture" <|
+                value coreFixture1 |> Expect.equal 1
+        , test "output is 1 when input is entryFixture1" <|
             \() ->
-                let
-                    entriesCoin =
-                        Array.fromList [ coinEntry1, coinEntry2, coinEntry3, coinEntry4 ]
-                in
-                    entries coinsFixture |> Expect.equal entriesCoin
-        ]
-
-
-bordersTest =
-    describe "entries"
-        [ test "output is [coinEntry1, coinEntry2, coinEntry3, coinEntry4, coinEntry5, coinEntry6, coinEntry7, coinEntry8, coinEntry9, coinEntry10, coinEntry11, coinEntry12] when input is coinsFixture" <|
+                value entryFixture1 |> Expect.equal 1
+        , test "output is 1 when input is borderFixture1" <|
             \() ->
-                let
-                    bordersCoin =
-                        Array.fromList [ coinBorder1, coinBorder2, coinBorder3, coinBorder4, coinBorder5, coinBorder6, coinBorder7, coinBorder8, coinBorder9, coinBorder10, coinBorder11, coinBorder12 ]
-                in
-                    borders coinsFixture |> Expect.equal bordersCoin
+                value borderFixture1 |> Expect.equal 1
         ]
 
 
-sumCoinsTest =
-    describe "sumCoins"
-        [ test "output is 56  when input is coinsFixture" <|
+aliveTest =
+    describe "alive"
+        [ test "output is True when input is coreFixture" <|
             \() ->
-                sumCoins coinsFixture |> Expect.equal 56
-        ]
-
-
-sumCoreTest =
-    describe "sumCore"
-        [ test "output is 4  when input is coinsFixture" <|
+                alive coreFixture1 |> Expect.equal True
+        , test "output is True when input is entryFixture1" <|
             \() ->
-                sumCore coinsFixture |> Expect.equal 4
-        ]
-
-
-tupleSumCoinsSumCoreTest =
-    describe "tupleSumCoinsSumCore"
-        [ test "output is (56, 4)  when input is coinsFixture" <|
+                alive entryFixture1 |> Expect.equal True
+        , test "output is True when input is borderFixture1" <|
             \() ->
-                tupleSumCoinsSumCore coinsFixture |> Expect.equal ( 56, 4 )
+                alive borderFixture1 |> Expect.equal True
         ]
 
 
-aliveBordersTest =
-    describe "aliveBorders"
-        [ test "output is BorderCoins [coinBorder1, coinBorder2, coinBorder3, coinBorder3] when input is coinFixture2" <|
+counterTest =
+    describe "counter"
+        [ test "output is True when input is coreFixture" <|
             \() ->
-                 aliveBorders coinsFixture2 |> Expect.equal (Array.fromList [ coinBorder1, coinBorder2, coinBorder3, coinBorder3 ])
-        ]
-
-        
-deadBordersTest =
-    describe "deadBorders"
-        [ test "output is BorderCoins [coinBorder11] when input is coinFixture2" <|
+                counter coreFixture1 |> Expect.equal Nothing
+        , test "output is True when input is entryFixture1" <|
             \() ->
-                 deadBorders coinsFixture2 |> Expect.equal (Array.fromList [ coinBorder11 ])
+                counter entryFixture1 |> Expect.equal Nothing
+        , test "output is True when input is borderFixture1" <|
+            \() ->
+                counter borderFixture1 |> Expect.equal (Just 1)
         ]
 
 
-        
+setTest =
+    describe "set"
+        [ test "output is error when input is 0 and coreFixture1" <|
+            \() ->
+                set 0 coreFixture1 |> Expect.equal (Err "x must be > 1")
+        , test "output is error when input is 10 and coreFixture1" <|
+            \() ->
+                set 10 coreFixture1 |> Expect.equal (Err "x must be < 9")
+        , test "output is Core 1 when input is 1 and coreFixture1" <|
+            \() ->
+                set 1 coreFixture1 |> Expect.equal (Ok (Core (CoreCoin 1)))
+        ]
 
 
-        
+killTest =
+    describe "kill"
+        [ test "output is coreFixture1 when input is coreFixture1" <|
+            \() ->
+                kill coreFixture1 |> Expect.equal coreFixture1
+        , test "output is entryFixture2 when input is and entryFixture1" <|
+            \() ->
+                kill entryFixture1 |> Expect.equal entryFixture2
+        , test "output is borderFixture2 when input is and borderFixture1" <|
+            \() ->
+                kill borderFixture1 |> Expect.equal borderFixture2
+        ]
+
+
+reviveTest =
+    describe "revive"
+        [ test "output is coreFixture1 when input is coreFixture1" <|
+            \() ->
+                revive coreFixture1 |> Expect.equal coreFixture1
+        , test "output is entryFixture1 when input is and entryFixture2" <|
+            \() ->
+                revive entryFixture2 |> Expect.equal entryFixture1
+        , test "output is borderFixture1 when input is and borderFixture2" <|
+            \() ->
+                revive borderFixture2 |> Expect.equal borderFixture1
+        ]
+
+
+isMultipleTest =
+    describe "isMultiple"
+        [ test "output is True when input is 4 coreFixture2" <|
+            \() ->
+                isMultiple 4 coreFixture2 |> Expect.equal True
+        , test "output is False when input is 1 and coreFixture2" <|
+            \() ->
+                isMultiple 1 coreFixture2 |> Expect.equal False
+        ]
+
+
+multipleFactorTest =
+    describe "multipleFactor"
+        [ test "output is 0 when input is 1 coreFixture2" <|
+            \() ->
+                multipleFactor 1 coreFixture2 |> Expect.equal 0
+        , test "output is 1 when input is 3 coreFixture2" <|
+            \() ->
+                multipleFactor 3 coreFixture2 |> Expect.equal 1
+        , test "output is 2 when input is 4 and coreFixture2" <|
+            \() ->
+                multipleFactor 4 coreFixture2 |> Expect.equal 2
+        ]
+
+
 main =
     run <|
         describe "CoinModule"
-            [ coreTest
-            , entriesTest
-            , bordersTest
-            , sumCoinsTest
-            , sumCoreTest
-            , tupleSumCoinsSumCoreTest
-            , deadBordersTest
-            , aliveBordersTest
+            [ valueTest
+            , aliveTest
+            , counterTest
+            , setTest
+            , killTest
+            , reviveTest
+            , isMultipleTest
+            , multipleFactorTest
             ]

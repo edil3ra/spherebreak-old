@@ -1,191 +1,139 @@
 module Coin exposing (..)
 
-import Array
-
-
-min_number =
+min_value : Int
+min_value =
     1
 
-max_number =
+
+max_value : Int
+max_value =
     9
 
+
+min_counter : Int
 min_counter =
     0
-              
+
+
+max_counter : Int
 max_counter =
     8
 
-        
+
 type Coin
     = Core CoreCoin
     | Entry EntryCoin
     | Border BorderCoin
 
 
-type alias Coins =
-    Array.Array Coin
-
-
 type alias CoreCoin =
-    { number : Int }
+    { value : Int }
 
 
 type alias EntryCoin =
-    { number : Int, alive : Bool }
+    { value : Int, alive : Bool }
 
 
 type alias BorderCoin =
-    { number : Int, alive : Bool, counter: Int }
-
-
-type alias EntriesCoin =
-    Array.Array EntryCoin
-
-
-type alias BordersCoin =
-    Array.Array BorderCoin
-
-
-type alias SumCoreCoin =
-    ( Int, Int )
-
-
-core : Coins -> CoreCoin
-core coins =
-    let
-        fn coin =
-            case coin of
-                Core x ->
-                    Just x
-
-                Entry _ ->
-                    Nothing
-
-                Border _ ->
-                    Nothing
-    in
-        coins
-            |> Array.toList
-            |> List.filterMap fn
-            |> Array.fromList
-            |> Array.get 0
-            |> Maybe.withDefault (CoreCoin 1)
-
-
-entries : Coins -> EntriesCoin
-entries coins =
-    let
-        fn coin =
-            case coin of
-                Core _ ->
-                    Nothing
-
-                Entry x ->
-                    Just x
-
-                Border _ ->
-                    Nothing
-    in
-        coins
-            |> Array.toList
-            |> List.filterMap fn
-            |> Array.fromList
-
-
-borders : Coins -> BordersCoin
-borders coins =
-    let
-        fn coin =
-            case coin of
-                Core _ ->
-                    Nothing
-
-                Entry _ ->
-                    Nothing
-
-                Border x ->
-                    Just x
-    in
-        coins
-            |> Array.toList
-            |> List.filterMap fn
-            |> Array.fromList
-
-
-sumCoins : Coins -> Int
-sumCoins coins =
-    let
-        fnSumCoins fnFilter =
-            coins
-                |> fnFilter
-                |> Array.filter .alive
-                |> Array.map .number
-                |> Array.toList
-                |> List.sum
-    in
-        (fnSumCoins entries) + (fnSumCoins borders)
-
-
-sumCore : Coins -> Int
-sumCore coins =
-    coins |> core |> .number
-
-
-tupleSumCoinsSumCore : Coins -> SumCoreCoin
-tupleSumCoinsSumCore coins =
-    let
-        entriesBorderSumNumber =
-            sumCoins coins
-
-        coreNumber =
-            sumCore coins
-    in
-        ( entriesBorderSumNumber, coreNumber )
+    { value : Int, alive : Bool, counter : Int }
 
 
 
+value : Coin -> Int
+value coin =
+    case coin of
+        Core core ->
+            .value core
+                
+        Entry entry ->
+            .value entry
 
-aliveBorders : Coins -> BordersCoin
-aliveBorders coins =
-    coins |> borders |> Array.filter .alive
-
-
-deadBorders : Coins -> BordersCoin
-deadBorders coins =
-    coins |> borders |> Array.filter (\x -> not x.alive)
-
-
-incrementBordersNumber : BordersCoin -> BordersCoin
-incrementBordersNumber coins =
-    coins |> Array.map (\coin -> { coin | number = coin.number + 1 })
+        Border border ->
+            .value border
 
         
-incrementBordersCounter : BordersCoin -> BordersCoin
-incrementBordersCounter coins =
-    coins |> Array.map (\coin -> { coin | counter = coin.counter + 1 })
+
+alive : Coin -> Bool
+alive coin =
+    case coin of
+        Core core ->
+            True
+
+        Entry entry ->
+            .alive entry
+
+        Border border ->
+            .alive border
 
 
-resetBordesrNumber : BordersCoin -> BordersCoin
-resetBordersNumber coins =
-    let
-        fn coin =
-            if coin.number <= max_number then
-                coin
-            else
-                { coin | alive = False, number = min_number }
-    in
-        coins |> Array.map fn
+counter : Coin -> Maybe Int
+counter coin =
+    case coin of
+        Core core ->
+            Nothing
 
-            
-resetBordersCounter : BordersCoin -> BordersCoin
-resetBordersCounter coins =
-    let
-        fn coin =
-            if coin.counter <= max_counter then
-                coin
-            else
-                { coin | alive = False, counter = min_counter }
-    in
-        coins |> Array.map fn
-            
+        Entry entry ->
+            Nothing
 
+        Border border ->
+            .counter border |> Just
+
+
+set : Int -> Coin -> Result String Coin
+set x coin =
+    if x < min_value then
+        Err ("x must be > " ++ (min_value |> toString))
+    else if x > max_value then
+        Err ("x must be < " ++ (max_value |> toString))
+    else
+        case coin of
+            Core core ->
+                Ok (Core {core | value = x})
+
+            Entry entry ->
+                Ok (Entry {entry | value = x})
+
+            Border border ->
+                Ok (Border {border | value = x})
+
+                
+
+kill : Coin -> Coin
+kill coin =
+    case coin of
+        Core core ->
+            Core core
+
+        Entry entry ->
+            Entry { entry | alive = False }
+
+        Border border ->
+            Border { border | alive = False }
+
+
+revive : Coin -> Coin
+revive coin =
+    case coin of
+        Core core ->
+            Core core
+
+        Entry entry ->
+            Entry { entry | alive = True }
+
+        Border border ->
+            Border { border | alive = True }
+
+
+isMultiple : Int -> Coin -> Bool
+isMultiple x coin =
+    (value coin)
+        |> rem x
+        |> (==) 0
+    
+        
+
+multipleFactor : Int -> Coin -> Int
+multipleFactor x coin =
+    x // (value coin)
+
+        
