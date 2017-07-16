@@ -12,7 +12,7 @@
 *** EntryCoin alias
 **** type alias
     number: Int
-    alive: Bool
+	hitted: Bool
 **** descrpiton
    + number cannot be change
    + used in order to to reach the CoreCoin number
@@ -22,6 +22,7 @@
 *** BorderCoin
 **** type alias
     number: Int
+	hitted: Bool 
     alive: Bool
     counter: Int
 **** description
@@ -49,6 +50,9 @@
 	 
 	 isMultiple -> Int -> Coin -> Bool
 	 multipleFactor -> Int -> Coin -> Int
+	 
+	 cycleValue ->
+	 cycleCounter
 
 *** Coins
 **** model type alias
@@ -60,13 +64,7 @@
 	 entries Coins -> EntriesCoin
 	 borders Coins -> BorderCoins
 
-	 incrementsValue -> Coins -> Coins
-	 incrementsCount -> Coins -> Coins
-	 kills -> Coins -> Coins (kill border with number over x, put counter to 0)
-	 revives -> Coins -> Coins (revive border with counter over x revive entries)
-	 randomizes -> Coins -> Coins (randomize the core coin, randomize the the revive border when counter = 0)
-	 next -> Coins -> Coins (incrementsValue incrementsCount, kills, revives, randomizes)
-
+	 hit number -> Coins -> Coin
 
 
 * Player

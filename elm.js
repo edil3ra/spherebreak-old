@@ -3188,9 +3188,7 @@ var _user$project$Coin$alive = function (coin) {
 		case 'Core':
 			return true;
 		case 'Entry':
-			return function (_) {
-				return _.alive;
-			}(_p1._0);
+			return true;
 		default:
 			return function (_) {
 				return _.alive;
@@ -3214,23 +3212,6 @@ var _user$project$Coin$value = function (coin) {
 			}(_p2._0);
 	}
 };
-var _user$project$Coin$isMultiple = F2(
-	function (x, coin) {
-		return A2(
-			F2(
-				function (x, y) {
-					return _elm_lang$core$Native_Utils.eq(x, y);
-				}),
-			0,
-			A2(
-				_elm_lang$core$Basics$rem,
-				x,
-				_user$project$Coin$value(coin)));
-	});
-var _user$project$Coin$multipleFactor = F2(
-	function (x, coin) {
-		return (_user$project$Coin$value(coin) / x) | 0;
-	});
 var _user$project$Coin$max_counter = 8;
 var _user$project$Coin$min_counter = 0;
 var _user$project$Coin$max_value = 9;
@@ -3256,19 +3237,19 @@ var _user$project$Coin$Core = function (a) {
 	return {ctor: 'Core', _0: a};
 };
 var _user$project$Coin$set = F2(
-	function (coin, x) {
+	function (x, coin) {
 		if (_elm_lang$core$Native_Utils.cmp(x, _user$project$Coin$min_value) < 0) {
 			return _elm_lang$core$Result$Err(
 				A2(
 					_elm_lang$core$Basics_ops['++'],
-					'x must be >',
+					'x must be > ',
 					_elm_lang$core$Basics$toString(_user$project$Coin$min_value)));
 		} else {
 			if (_elm_lang$core$Native_Utils.cmp(x, _user$project$Coin$max_value) > 0) {
 				return _elm_lang$core$Result$Err(
 					A2(
 						_elm_lang$core$Basics_ops['++'],
-						'x must be <',
+						'x must be < ',
 						_elm_lang$core$Basics$toString(_user$project$Coin$max_value)));
 			} else {
 				var _p3 = coin;
@@ -3301,15 +3282,12 @@ var _user$project$Coin$kill = function (coin) {
 		case 'Core':
 			return _user$project$Coin$Core(_p4._0);
 		case 'Entry':
-			return _user$project$Coin$Entry(
-				_elm_lang$core$Native_Utils.update(
-					_p4._0,
-					{alive: true}));
+			return _user$project$Coin$Entry(_p4._0);
 		default:
 			return _user$project$Coin$Border(
 				_elm_lang$core$Native_Utils.update(
 					_p4._0,
-					{alive: true}));
+					{alive: false}));
 	}
 };
 var _user$project$Coin$revive = function (coin) {
@@ -3318,15 +3296,12 @@ var _user$project$Coin$revive = function (coin) {
 		case 'Core':
 			return _user$project$Coin$Core(_p5._0);
 		case 'Entry':
-			return _user$project$Coin$Entry(
-				_elm_lang$core$Native_Utils.update(
-					_p5._0,
-					{alive: false}));
+			return _user$project$Coin$Entry(_p5._0);
 		default:
 			return _user$project$Coin$Border(
 				_elm_lang$core$Native_Utils.update(
 					_p5._0,
-					{alive: false}));
+					{alive: true}));
 	}
 };
 

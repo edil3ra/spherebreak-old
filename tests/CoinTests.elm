@@ -29,12 +29,12 @@ entryFixture2 =
 
 borderFixture1 : Coin
 borderFixture1 =
-    Border (BorderCoin 1 True 1)
+    Border (BorderCoin 1 True True 1)
 
 
 borderFixture2 : Coin
 borderFixture2 =
-    Border (BorderCoin 1 False 1)
+    Border (BorderCoin 1 True False 1)
 
 
 valueTest =
@@ -98,9 +98,9 @@ killTest =
         [ test "output is coreFixture1 when input is coreFixture1" <|
             \() ->
                 kill coreFixture1 |> Expect.equal coreFixture1
-        , test "output is entryFixture2 when input is and entryFixture1" <|
+        , test "output is entryFixture1 when input is and entryFixture1" <|
             \() ->
-                kill entryFixture1 |> Expect.equal entryFixture2
+                kill entryFixture1 |> Expect.equal entryFixture1
         , test "output is borderFixture2 when input is and borderFixture1" <|
             \() ->
                 kill borderFixture1 |> Expect.equal borderFixture2
@@ -112,37 +112,12 @@ reviveTest =
         [ test "output is coreFixture1 when input is coreFixture1" <|
             \() ->
                 revive coreFixture1 |> Expect.equal coreFixture1
-        , test "output is entryFixture1 when input is and entryFixture2" <|
+        , test "output is entryFixture1 when input is and entryFixture1" <|
             \() ->
-                revive entryFixture2 |> Expect.equal entryFixture1
+                revive entryFixture1 |> Expect.equal entryFixture1
         , test "output is borderFixture1 when input is and borderFixture2" <|
             \() ->
                 revive borderFixture2 |> Expect.equal borderFixture1
-        ]
-
-
-isMultipleTest =
-    describe "isMultiple"
-        [ test "output is True when input is 4 coreFixture2" <|
-            \() ->
-                isMultiple 4 coreFixture2 |> Expect.equal True
-        , test "output is False when input is 1 and coreFixture2" <|
-            \() ->
-                isMultiple 1 coreFixture2 |> Expect.equal False
-        ]
-
-
-multipleFactorTest =
-    describe "multipleFactor"
-        [ test "output is 0 when input is 1 coreFixture2" <|
-            \() ->
-                multipleFactor 1 coreFixture2 |> Expect.equal 0
-        , test "output is 1 when input is 3 coreFixture2" <|
-            \() ->
-                multipleFactor 3 coreFixture2 |> Expect.equal 1
-        , test "output is 2 when input is 4 and coreFixture2" <|
-            \() ->
-                multipleFactor 4 coreFixture2 |> Expect.equal 2
         ]
 
 
@@ -155,6 +130,5 @@ main =
             , setTest
             , killTest
             , reviveTest
-            , isMultipleTest
-            , multipleFactorTest
+                
             ]

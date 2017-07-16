@@ -1,5 +1,6 @@
 module Coin exposing (..)
 
+
 min_value : Int
 min_value =
     1
@@ -31,12 +32,11 @@ type alias CoreCoin =
 
 
 type alias EntryCoin =
-    { value : Int, alive : Bool }
+    { value : Int, hitted : Bool }
 
 
 type alias BorderCoin =
-    { value : Int, alive : Bool, counter : Int }
-
+    { value : Int, hitted : Bool, alive : Bool, counter : Int }
 
 
 value : Coin -> Int
@@ -44,14 +44,13 @@ value coin =
     case coin of
         Core core ->
             .value core
-                
+
         Entry entry ->
             .value entry
 
         Border border ->
             .value border
 
-        
 
 alive : Coin -> Bool
 alive coin =
@@ -60,7 +59,7 @@ alive coin =
             True
 
         Entry entry ->
-            .alive entry
+            True
 
         Border border ->
             .alive border
@@ -88,15 +87,14 @@ set x coin =
     else
         case coin of
             Core core ->
-                Ok (Core {core | value = x})
+                Ok (Core { core | value = x })
 
             Entry entry ->
-                Ok (Entry {entry | value = x})
+                Ok (Entry { entry | value = x })
 
             Border border ->
-                Ok (Border {border | value = x})
+                Ok (Border { border | value = x })
 
-                
 
 kill : Coin -> Coin
 kill coin =
@@ -105,7 +103,7 @@ kill coin =
             Core core
 
         Entry entry ->
-            Entry { entry | alive = False }
+            Entry entry
 
         Border border ->
             Border { border | alive = False }
@@ -118,22 +116,7 @@ revive coin =
             Core core
 
         Entry entry ->
-            Entry { entry | alive = True }
+            Entry entry
 
         Border border ->
             Border { border | alive = True }
-
-
-isMultiple : Int -> Coin -> Bool
-isMultiple x coin =
-    (value coin)
-        |> rem x
-        |> (==) 0
-    
-        
-
-multipleFactor : Int -> Coin -> Int
-multipleFactor x coin =
-    x // (value coin)
-
-        

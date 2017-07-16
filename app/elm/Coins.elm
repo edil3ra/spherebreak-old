@@ -1,8 +1,6 @@
 module Coins exposing (..)
-import Coin exposing (Coin(..) ,CoreCoin, EntryCoin, BorderCoin)
 
-
-
+import Coin exposing (Coin(..), CoreCoin, EntryCoin, BorderCoin)
 
 
 type alias EntriesCoin =
@@ -15,8 +13,7 @@ type alias BordersCoin =
 
 type alias Coins =
     List Coin
-        
-        
+
 
 core : Coins -> CoreCoin
 core coins =
@@ -72,4 +69,3 @@ borders coins =
     in
         coins
             |> List.filterMap fn
-
