@@ -101,7 +101,10 @@ calculateCombo player =
             player.comboSum
 
         multiple =
-            multipleLength ^ multipleCount
+            if multipleCount == 0 then
+                0
+            else
+                multipleLength ^ multipleCount
 
         sum =
             sumLength * sumCount
@@ -111,5 +114,16 @@ calculateCombo player =
 
 updatePoint : Player -> Player
 updatePoint player =
-    {player | point =  player.goal +  (calculateCombo player)}
-            
+    { player | point = player.point + player.goal + (calculateCombo player) }
+
+
+next : Player -> Int -> Player
+next player value =
+    if not (isGoalReach player) then
+        player
+    else
+        let
+            updatePlayer =
+                player |> updateCombo |> updatePoint |> resetHand
+        in
+            { player | goal = value }

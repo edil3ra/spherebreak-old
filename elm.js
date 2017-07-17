@@ -3176,14 +3176,14 @@ var _user$project$Player$calculateCombo = function (player) {
 	var _p1 = player.comboMultiple;
 	var multipleLength = _p1._0;
 	var multipleCount = _p1._1;
-	var multiple = Math.pow(multipleLength, multipleCount);
+	var multiple = _elm_lang$core$Native_Utils.eq(multipleCount, 0) ? 0 : Math.pow(multipleLength, multipleCount);
 	return multiple + sum;
 };
 var _user$project$Player$updatePoint = function (player) {
 	return _elm_lang$core$Native_Utils.update(
 		player,
 		{
-			point: player.goal + _user$project$Player$calculateCombo(player)
+			point: (player.point + player.goal) + _user$project$Player$calculateCombo(player)
 		});
 };
 var _user$project$Player$sumHand = function (player) {
@@ -3198,7 +3198,7 @@ var _user$project$Player$rem = function (player) {
 		_user$project$Player$sumHand(player),
 		player.goal);
 };
-var _user$project$Player$isReachingGoal = function (player) {
+var _user$project$Player$isGoalReach = function (player) {
 	return (_elm_lang$core$Native_Utils.cmp(
 		_user$project$Player$factor(player),
 		0) > 0) && _elm_lang$core$Native_Utils.eq(
@@ -3230,6 +3230,19 @@ var _user$project$Player$resetHand = function (player) {
 			hand: {ctor: '[]'}
 		});
 };
+var _user$project$Player$next = F2(
+	function (player, value) {
+		if (!_user$project$Player$isGoalReach(player)) {
+			return player;
+		} else {
+			var updatePlayer = _user$project$Player$resetHand(
+				_user$project$Player$updatePoint(
+					_user$project$Player$updateCombo(player)));
+			return _elm_lang$core$Native_Utils.update(
+				player,
+				{goal: value});
+		}
+	});
 var _user$project$Player$addHand = F2(
 	function (value, player) {
 		return _elm_lang$core$Native_Utils.update(

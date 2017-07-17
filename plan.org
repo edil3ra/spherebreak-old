@@ -36,7 +36,7 @@
 **** model
 	 Core CoreCoin
 	 Entry EntryCoin
-	 Border BorderCoin
+ 	 Border BorderCoin
 **** description
    + the Coin model will be used for all interection with core entry and border coin
 **** functions
