@@ -4,7 +4,6 @@ import Test exposing (describe, test)
 import Expect
 import Test.Runner.Html exposing (run)
 import Coin exposing (..)
-import Debug
 
 
 coreFixture1 : Coin

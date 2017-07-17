@@ -82,9 +82,10 @@
   comboCurrent: Combo
   comboLength: Int
 
+
 ** functions
   + addHand -> number -> Player (add number to hand)
-  + isReachingGoal -> Player -> True
+  + isReachingGoal -> Player -> Bool
   + resetHand -> Player (empty hand)
   + calculatePoint -> Player 
     
