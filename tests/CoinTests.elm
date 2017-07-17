@@ -19,12 +19,12 @@ coreFixture2 =
 
 entryFixture1 : Coin
 entryFixture1 =
-    Entry (EntryCoin 1 True)
+    Entry (EntryCoin 1 False)
 
 
 entryFixture2 : Coin
 entryFixture2 =
-    Entry (EntryCoin 1 False)
+    Entry (EntryCoin 1 True)
 
 
 borderFixture1 : Coin
@@ -35,6 +35,10 @@ borderFixture1 =
 borderFixture2 : Coin
 borderFixture2 =
     Border (BorderCoin 1 True False 1)
+
+borderFixture3 : Coin
+borderFixture3 =
+    Border (BorderCoin 1 False False 1)
 
 
 valueTest =
@@ -79,6 +83,20 @@ counterTest =
         ]
 
 
+isHitTest =
+    describe "isHit"
+        [ test "output is False when input is coreFixture1" <|
+          \() ->
+              isHit coreFixture1 |> Expect.equal False
+          , test "output is False when input is entryFixture1" <|
+          \() ->
+              isHit entryFixture1 |> Expect.equal False
+        , test "output is False when input is borderFixture1" <|
+          \() ->
+              isHit borderFixture1 |> Expect.equal True
+        ]
+        
+
 setTest =
     describe "set"
         [ test "output is error when input is 0 and coreFixture1" <|
@@ -92,6 +110,7 @@ setTest =
                 set 1 coreFixture1 |> Expect.equal (Ok (Core (CoreCoin 1)))
         ]
 
+        
 
 killTest =
     describe "kill"
@@ -121,14 +140,44 @@ reviveTest =
         ]
 
 
+hitTest =
+    describe "hit"
+        [ test "output is coreFixture1 when input is coreFixture1" <|
+            \() ->
+                hit coreFixture1 |> Expect.equal coreFixture1
+        , test "output is entryFixture2 when input is entryFixture1" <|
+            \() ->
+                hit entryFixture1 |> Expect.equal entryFixture2
+        , test "output is borderFixture1 when input is borderFixture1" <|
+            \() ->
+                hit borderFixture1 |> Expect.equal borderFixture1
+        ]
+
+
+unhitTest =
+    describe "unhit"
+        [ test "output is coreFixture1 when input is coreFixture1" <|
+            \() ->
+                unhit coreFixture1 |> Expect.equal coreFixture1
+        , test "output is entryFixture2 when input is entryFixture1" <|
+            \() ->
+                unhit entryFixture2 |> Expect.equal entryFixture1
+        , test "output is borderFixture3 when input is borderFixture2" <|
+            \() ->
+                unhit borderFixture2 |> Expect.equal borderFixture3
+        ]
+
+
 main =
     run <|
         describe "CoinModule"
             [ valueTest
             , aliveTest
             , counterTest
+            , isHitTest
             , setTest
             , killTest
             , reviveTest
-                
+            , hitTest
+            , unhitTest
             ]

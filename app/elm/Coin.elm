@@ -78,6 +78,21 @@ counter coin =
             .counter border |> Just
 
 
+isHit : Coin -> Bool
+isHit coin =
+    case coin of
+        Core core ->
+            False
+
+        Entry entry ->
+            .hitted entry
+
+        Border border ->
+            .hitted border
+
+
+                
+
 set : Int -> Coin -> Result String Coin
 set x coin =
     if x < min_value then
@@ -120,3 +135,32 @@ revive coin =
 
         Border border ->
             Border { border | alive = True }
+
+
+hit : Coin -> Coin
+hit coin =
+    case coin of
+        Core core ->
+            Core core
+
+        Entry entry ->
+            Entry { entry | hitted = True }
+
+        Border border ->
+            Border { border | hitted = True }
+
+
+unhit : Coin -> Coin
+unhit coin =
+    case coin of
+        Core core ->
+            Core core
+
+        Entry entry ->
+            Entry {entry | hitted = False}
+
+        Border border ->
+            Border { border | hitted = False }
+
+                
+                

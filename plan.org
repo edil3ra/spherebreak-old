@@ -43,16 +43,15 @@
 	 value -> Coin -> Int
 	 alive -> Coin -> Bool
 	 counter -> Coin -> Maybe Int
+     hitted -> Coin -> Boolean
 
 	 set -> Int -> Coin -> Coin
 	 kill -> Coin -> Coin
 	 revive -> Coin -> Coin
+	 hit -> Coin -> Coin
+	 unhit -> Coin -> Coin
+     
 	 
-	 isMultiple -> Int -> Coin -> Bool
-	 multipleFactor -> Int -> Coin -> Int
-	 
-	 cycleValue ->
-	 cycleCounter
 
 *** Coins
 **** model type alias
@@ -65,7 +64,6 @@
 	 borders Coins -> BorderCoins
 
 	 hit number -> Coins -> Coin
-
 
 * Player
 ** models
@@ -80,7 +78,7 @@
 ** functions
   + sumHand -> number
   + countHand -> number
-  + addHand -> number -> Player (add number to head)
+  + addHand -> number -> Player (add number to hand)
   + resetHand -> Player (empty hand)
   + addPoint -> Player (update currentPoint with hand and combo)
     
