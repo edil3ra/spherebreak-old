@@ -1,5 +1,7 @@
 module Coins exposing (..)
 
+import Array
+import Coin
 import Coin exposing (Coin(..), CoreCoin, EntryCoin, BorderCoin)
 
 
@@ -69,3 +71,18 @@ borders coins =
     in
         coins
             |> List.filterMap fn
+
+
+get : Int -> Coins -> Maybe Coin
+get index coins =
+      Array.fromList coins
+          |> Array.get index
+
+
+set : Int ->  Coin -> Coins -> Coins
+set index coin coins =
+      Array.fromList coins
+          |> Array.set index coin
+          |> Array.toList
+      
+      

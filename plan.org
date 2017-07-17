@@ -62,25 +62,31 @@
 	 core Coins -> CoreCoin
 	 entries Coins -> EntriesCoin
 	 borders Coins -> BorderCoins
-
-	 hit number -> Coins -> Coin
+     get Coins -> Coin -> Coins
+     set Coins -> Coin -> Coins
+     
 
 * Player
 ** models
+*** Combo type
+    type Combo =
+    Multiple Int
+    Count
+    
+
 *** Player alias
   hand: List Int
-  currentPoint: Int
-  maxPoint: Int
-  comboMultiple: Maybe Int
-  comboSum: Maybe Int
+  goal: Int
+  point: Int
+  compboPrevious: Combo
+  comboCurrent: Combo
   comboLength: Int
 
 ** functions
-  + sumHand -> number
-  + countHand -> number
   + addHand -> number -> Player (add number to hand)
+  + isReachingGoal -> Player -> True
   + resetHand -> Player (empty hand)
-  + addPoint -> Player (update currentPoint with hand and combo)
+  + calculatePoint -> Player 
     
 * Main
 ** models
