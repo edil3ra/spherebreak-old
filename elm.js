@@ -3168,98 +3168,248 @@ var _elm_lang$core$Tuple$first = function (_p6) {
 	return _p7._0;
 };
 
-var _user$project$Player$calculateCombo = function (player) {
-	var _p0 = player.comboSum;
-	var sumLength = _p0._0;
-	var sumCount = _p0._1;
-	var sum = sumLength * sumCount;
-	var _p1 = player.comboMultiple;
-	var multipleLength = _p1._0;
-	var multipleCount = _p1._1;
-	var multiple = _elm_lang$core$Native_Utils.eq(multipleCount, 0) ? 0 : Math.pow(multipleLength, multipleCount);
-	return multiple + sum;
+var _user$project$Coin$isHit = function (coin) {
+	var _p0 = coin;
+	switch (_p0.ctor) {
+		case 'Core':
+			return false;
+		case 'Entry':
+			return function (_) {
+				return _.hitted;
+			}(_p0._0);
+		default:
+			return function (_) {
+				return _.hitted;
+			}(_p0._0);
+	}
 };
-var _user$project$Player$updatePoint = function (player) {
-	return _elm_lang$core$Native_Utils.update(
-		player,
-		{
-			point: (player.point + player.goal) + _user$project$Player$calculateCombo(player)
-		});
+var _user$project$Coin$counter = function (coin) {
+	var _p1 = coin;
+	switch (_p1.ctor) {
+		case 'Core':
+			return _elm_lang$core$Maybe$Nothing;
+		case 'Entry':
+			return _elm_lang$core$Maybe$Nothing;
+		default:
+			return _elm_lang$core$Maybe$Just(
+				function (_) {
+					return _.counter;
+				}(_p1._0));
+	}
 };
-var _user$project$Player$sumHand = function (player) {
-	return _elm_lang$core$List$sum(player.hand);
+var _user$project$Coin$alive = function (coin) {
+	var _p2 = coin;
+	switch (_p2.ctor) {
+		case 'Core':
+			return true;
+		case 'Entry':
+			return true;
+		default:
+			return function (_) {
+				return _.alive;
+			}(_p2._0);
+	}
 };
-var _user$project$Player$factor = function (player) {
-	return (_user$project$Player$sumHand(player) / player.goal) | 0;
+var _user$project$Coin$value = function (coin) {
+	var _p3 = coin;
+	switch (_p3.ctor) {
+		case 'Core':
+			return function (_) {
+				return _.value;
+			}(_p3._0);
+		case 'Entry':
+			return function (_) {
+				return _.value;
+			}(_p3._0);
+		default:
+			return function (_) {
+				return _.value;
+			}(_p3._0);
+	}
 };
-var _user$project$Player$rem = function (player) {
-	return A2(
-		_elm_lang$core$Basics_ops['%'],
-		_user$project$Player$sumHand(player),
-		player.goal);
+var _user$project$Coin$max_counter = 8;
+var _user$project$Coin$min_counter = 0;
+var _user$project$Coin$max_value = 9;
+var _user$project$Coin$min_value = 1;
+var _user$project$Coin$CoreCoin = function (a) {
+	return {value: a};
 };
-var _user$project$Player$isGoalReach = function (player) {
-	return (_elm_lang$core$Native_Utils.cmp(
-		_user$project$Player$factor(player),
-		0) > 0) && _elm_lang$core$Native_Utils.eq(
-		_user$project$Player$rem(player),
-		0);
+var _user$project$Coin$EntryCoin = F2(
+	function (a, b) {
+		return {value: a, hitted: b};
+	});
+var _user$project$Coin$BorderCoin = F4(
+	function (a, b, c, d) {
+		return {value: a, hitted: b, alive: c, counter: d};
+	});
+var _user$project$Coin$Border = function (a) {
+	return {ctor: 'Border', _0: a};
 };
-var _user$project$Player$countHand = function (player) {
-	return _elm_lang$core$List$length(player.hand);
+var _user$project$Coin$Entry = function (a) {
+	return {ctor: 'Entry', _0: a};
 };
-var _user$project$Player$updateCombo = function (player) {
-	var _p2 = player.comboSum;
-	var sumLength2 = _p2._0;
-	var sumCount = _p2._1;
-	var _p3 = player.comboMultiple;
-	var multipleLength2 = _p3._0;
-	var multipleCount = _p3._1;
-	var sumLength1 = _user$project$Player$countHand(player);
-	var updatedSum = _elm_lang$core$Native_Utils.eq(sumLength1, sumLength2) ? {ctor: '_Tuple2', _0: sumLength1, _1: sumCount + 1} : {ctor: '_Tuple2', _0: sumLength1, _1: 0};
-	var multipleLength1 = _user$project$Player$factor(player);
-	var updatedMultiple = _elm_lang$core$Native_Utils.eq(multipleLength1, multipleLength2) ? {ctor: '_Tuple2', _0: multipleLength1, _1: multipleCount + 1} : {ctor: '_Tuple2', _0: multipleLength1, _1: 0};
-	return _elm_lang$core$Native_Utils.update(
-		player,
-		{comboMultiple: updatedMultiple, comboSum: updatedSum});
+var _user$project$Coin$Core = function (a) {
+	return {ctor: 'Core', _0: a};
 };
-var _user$project$Player$resetHand = function (player) {
-	return _elm_lang$core$Native_Utils.update(
-		player,
-		{
-			hand: {ctor: '[]'}
-		});
-};
-var _user$project$Player$next = F2(
-	function (player, value) {
-		if (!_user$project$Player$isGoalReach(player)) {
-			return player;
+var _user$project$Coin$set = F2(
+	function (x, coin) {
+		if (_elm_lang$core$Native_Utils.cmp(x, _user$project$Coin$min_value) < 0) {
+			return _elm_lang$core$Result$Err(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'x must be > ',
+					_elm_lang$core$Basics$toString(_user$project$Coin$min_value)));
 		} else {
-			var updatePlayer = _user$project$Player$resetHand(
-				_user$project$Player$updatePoint(
-					_user$project$Player$updateCombo(player)));
-			return _elm_lang$core$Native_Utils.update(
-				player,
-				{goal: value});
+			if (_elm_lang$core$Native_Utils.cmp(x, _user$project$Coin$max_value) > 0) {
+				return _elm_lang$core$Result$Err(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'x must be < ',
+						_elm_lang$core$Basics$toString(_user$project$Coin$max_value)));
+			} else {
+				var _p4 = coin;
+				switch (_p4.ctor) {
+					case 'Core':
+						return _elm_lang$core$Result$Ok(
+							_user$project$Coin$Core(
+								_elm_lang$core$Native_Utils.update(
+									_p4._0,
+									{value: x})));
+					case 'Entry':
+						return _elm_lang$core$Result$Ok(
+							_user$project$Coin$Entry(
+								_elm_lang$core$Native_Utils.update(
+									_p4._0,
+									{value: x})));
+					default:
+						return _elm_lang$core$Result$Ok(
+							_user$project$Coin$Border(
+								_elm_lang$core$Native_Utils.update(
+									_p4._0,
+									{value: x})));
+				}
+			}
 		}
 	});
-var _user$project$Player$addHand = F2(
-	function (value, player) {
-		return _elm_lang$core$Native_Utils.update(
-			player,
-			{
-				hand: {ctor: '::', _0: value, _1: player.hand}
-			});
-	});
-var _user$project$Player$Player = F5(
-	function (a, b, c, d, e) {
-		return {hand: a, goal: b, point: c, comboSum: d, comboMultiple: e};
+var _user$project$Coin$kill = function (coin) {
+	var _p5 = coin;
+	switch (_p5.ctor) {
+		case 'Core':
+			return _user$project$Coin$Core(_p5._0);
+		case 'Entry':
+			return _user$project$Coin$Entry(_p5._0);
+		default:
+			return _user$project$Coin$Border(
+				_elm_lang$core$Native_Utils.update(
+					_p5._0,
+					{alive: false}));
+	}
+};
+var _user$project$Coin$revive = function (coin) {
+	var _p6 = coin;
+	switch (_p6.ctor) {
+		case 'Core':
+			return _user$project$Coin$Core(_p6._0);
+		case 'Entry':
+			return _user$project$Coin$Entry(_p6._0);
+		default:
+			return _user$project$Coin$Border(
+				_elm_lang$core$Native_Utils.update(
+					_p6._0,
+					{alive: true}));
+	}
+};
+var _user$project$Coin$hit = function (coin) {
+	var _p7 = coin;
+	switch (_p7.ctor) {
+		case 'Core':
+			return _user$project$Coin$Core(_p7._0);
+		case 'Entry':
+			return _user$project$Coin$Entry(
+				_elm_lang$core$Native_Utils.update(
+					_p7._0,
+					{hitted: true}));
+		default:
+			return _user$project$Coin$Border(
+				_elm_lang$core$Native_Utils.update(
+					_p7._0,
+					{hitted: true}));
+	}
+};
+var _user$project$Coin$unhit = function (coin) {
+	var _p8 = coin;
+	switch (_p8.ctor) {
+		case 'Core':
+			return _user$project$Coin$Core(_p8._0);
+		case 'Entry':
+			return _user$project$Coin$Entry(
+				_elm_lang$core$Native_Utils.update(
+					_p8._0,
+					{hitted: false}));
+		default:
+			return _user$project$Coin$Border(
+				_elm_lang$core$Native_Utils.update(
+					_p8._0,
+					{hitted: false}));
+	}
+};
+var _user$project$Coin$next = F2(
+	function (value, coin) {
+		var _p9 = coin;
+		switch (_p9.ctor) {
+			case 'Core':
+				return A2(
+					_elm_lang$core$Result$withDefault,
+					coin,
+					A2(
+						_user$project$Coin$set,
+						value,
+						_user$project$Coin$Core(_p9._0)));
+			case 'Entry':
+				return _user$project$Coin$unhit(
+					_user$project$Coin$Entry(_p9._0));
+			default:
+				var _p10 = _p9._0;
+				var incValue = function (border) {
+					return _elm_lang$core$Native_Utils.update(
+						border,
+						{value: border.value + 1});
+				};
+				var incCounter = function (border) {
+					return _elm_lang$core$Native_Utils.update(
+						border,
+						{counter: border.counter + 1});
+				};
+				var resetCounter = function (border) {
+					return _elm_lang$core$Native_Utils.update(
+						border,
+						{counter: _user$project$Coin$min_counter});
+				};
+				var isHit = _p10.hitted;
+				var isToBig = _elm_lang$core$Native_Utils.cmp(_p10.value + 1, _user$project$Coin$max_value) > 0;
+				var isCounterOver = _elm_lang$core$Native_Utils.cmp(_p10.counter + 1, _user$project$Coin$max_counter) > -1;
+				var isDead = !_p10.alive;
+				return isDead ? (isCounterOver ? A2(
+					_elm_lang$core$Result$withDefault,
+					coin,
+					A2(
+						_user$project$Coin$set,
+						value,
+						_user$project$Coin$revive(
+							_user$project$Coin$unhit(
+								_user$project$Coin$Border(
+									resetCounter(_p10)))))) : _user$project$Coin$Border(
+					incCounter(_p10))) : ((isToBig || isHit) ? _user$project$Coin$kill(
+					_user$project$Coin$unhit(
+						_user$project$Coin$Border(_p10))) : _user$project$Coin$Border(
+					incValue(_p10)));
+		}
 	});
 
 var Elm = {};
-Elm['Player'] = Elm['Player'] || {};
-if (typeof _user$project$Player$main !== 'undefined') {
-    _user$project$Player$main(Elm['Player'], 'Player', undefined);
+Elm['Coin'] = Elm['Coin'] || {};
+if (typeof _user$project$Coin$main !== 'undefined') {
+    _user$project$Coin$main(Elm['Coin'], 'Coin', undefined);
 }
 
 if (typeof define === "function" && define['amd'])

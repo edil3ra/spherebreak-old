@@ -1,8 +1,10 @@
 module Coins exposing (..)
 
 import Array
+import Tuple
 import Coin
-import Coin exposing (Coin(..), CoreCoin, EntryCoin, BorderCoin)
+import Coin exposing (Coin(..), CoreCoin, EntryCoin, BorderCoin, min_value, max_value)
+import Random
 
 
 type alias EntriesCoin =
@@ -75,14 +77,26 @@ borders coins =
 
 get : Int -> Coins -> Maybe Coin
 get index coins =
-      Array.fromList coins
-          |> Array.get index
+    Array.fromList coins
+        |> Array.get index
 
 
-set : Int ->  Coin -> Coins -> Coins
+set : Int -> Coin -> Coins -> Coins
 set index coin coins =
-      Array.fromList coins
-          |> Array.set index coin
-          |> Array.toList
-      
-      
+    Array.fromList coins
+        |> Array.set index coin
+        |> Array.toList
+
+
+next : Random.Seed -> Coins -> Coins
+next seed coins =
+    let
+        newValuesGen : Random.Generator (List Int)
+        newValuesGen =
+            Random.list (List.length coins) (Random.int min_value max_value)
+
+        newValues : List Int
+        newValues =
+            (Random.step newValuesGen seed) |> Tuple.first
+    in
+        List.map2 (\coin value -> Coin.next value coin) coins newValues

@@ -35,9 +35,15 @@ borderFixture2 : Coin
 borderFixture2 =
     Border (BorderCoin 1 True False 1)
 
+
 borderFixture3 : Coin
 borderFixture3 =
     Border (BorderCoin 1 False False 1)
+
+
+borderFixture4 : Coin
+borderFixture4 =
+    Border (BorderCoin 1 False True 9)
 
 
 valueTest =
@@ -85,16 +91,16 @@ counterTest =
 isHitTest =
     describe "isHit"
         [ test "output is False when input is coreFixture1" <|
-          \() ->
-              isHit coreFixture1 |> Expect.equal False
-          , test "output is False when input is entryFixture1" <|
-          \() ->
-              isHit entryFixture1 |> Expect.equal False
+            \() ->
+                isHit coreFixture1 |> Expect.equal False
+        , test "output is False when input is entryFixture1" <|
+            \() ->
+                isHit entryFixture1 |> Expect.equal False
         , test "output is False when input is borderFixture1" <|
-          \() ->
-              isHit borderFixture1 |> Expect.equal True
+            \() ->
+                isHit borderFixture1 |> Expect.equal True
         ]
-        
+
 
 setTest =
     describe "set"
@@ -109,7 +115,6 @@ setTest =
                 set 1 coreFixture1 |> Expect.equal (Ok (Core (CoreCoin 1)))
         ]
 
-        
 
 killTest =
     describe "kill"
@@ -167,6 +172,74 @@ unhitTest =
         ]
 
 
+nextTest =
+    describe "next"
+        [ let
+            coin1 =
+                Core (CoreCoin 1)
+
+            coin2 =
+                Core (CoreCoin 2)
+          in
+            test "output is coin2 when input is 2 and coin1" <|
+                \() ->
+                    next 2 coin1 |> Expect.equal coin2
+        , let
+            coin1 =
+                Entry (EntryCoin 1 True )
+
+            coin2 =
+                Entry (EntryCoin 1 False )
+          in
+            test "output is coin2 when input is 2 and coin1" <|
+                \() ->
+                    next 2 coin1 |> Expect.equal coin2
+        , let
+            coin1 =
+                Border (BorderCoin 1 False False max_counter)
+
+            coin2 =
+                Border (BorderCoin 3 False True min_counter )
+          in
+            test "output is coin2 when input is 3 and coin1" <|
+                \() ->
+                    next 3 coin1 |> Expect.equal coin2
+
+        , let
+            coin1 =
+                Border (BorderCoin 1 False False 0)
+
+            coin2 =
+                Border (BorderCoin 1 False False 1)
+          in
+            test "output is coin2 when input is 3 and coin1" <|
+                \() ->
+                    next 3 coin1 |> Expect.equal coin2
+
+        , let
+            coin1 =
+                Border (BorderCoin max_value True True 0)
+
+            coin2 =
+                Border (BorderCoin max_value False False 0)
+          in
+            test "output is coin2 when input is 3 and coin1" <|
+                \() ->
+                    next 3 coin1 |> Expect.equal coin2
+
+        , let
+            coin1 =
+                Border (BorderCoin 1 False True 0)
+
+            coin2 =
+                Border (BorderCoin 2 False True 0)
+          in
+            test "output is coin2 when input is 3 and coin1" <|
+                \() ->
+                    next 3 coin1 |> Expect.equal coin2
+        ]
+
+
 main =
     run <|
         describe "CoinModule"
@@ -179,4 +252,5 @@ main =
             , reviveTest
             , hitTest
             , unhitTest
+            , nextTest
             ]

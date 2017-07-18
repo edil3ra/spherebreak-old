@@ -91,8 +91,6 @@ isHit coin =
             .hitted border
 
 
-                
-
 set : Int -> Coin -> Result String Coin
 set x coin =
     if x < min_value then
@@ -157,10 +155,69 @@ unhit coin =
             Core core
 
         Entry entry ->
-            Entry {entry | hitted = False}
+            Entry { entry | hitted = False }
 
         Border border ->
             Border { border | hitted = False }
 
-                
-                
+
+next : Int -> Coin -> Coin
+next value coin =
+    case coin of
+        Core core ->
+            Core core
+                |> set value
+                |> Result.withDefault coin
+
+        Entry entry ->
+            Entry entry
+                |> unhit
+
+        Border border ->
+            let
+                isDead =
+                    not border.alive
+                        
+                isCounterOver =
+                    border.counter + 1 >= max_counter
+
+                isToBig =
+                    border.value + 1 > max_value
+
+                isHit =
+                    border.hitted
+
+                resetCounter =
+                    (\border -> { border | counter = min_counter })
+
+                incCounter =
+                    (\border -> { border | counter = border.counter + 1 })
+
+                incValue =
+                    (\border -> { border | value = border.value + 1 })
+            in
+                if isDead then
+                    if isCounterOver then
+                        border
+                            |> resetCounter
+                            |> Border
+                            |> unhit
+                            |> revive
+                            |> set value
+                            |> Result.withDefault coin
+                    else
+                        border
+                            |> incCounter
+                            |> Border
+                else
+                    if isToBig || isHit then
+                        border
+                            |> Border
+                            |> unhit
+                            |> kill
+                    else
+                        border
+                            |> incValue
+                            |> Border
+
+                           

@@ -14159,562 +14159,725 @@ var _rtfeldman$html_test_runner$Test_Runner_Html$runWithOptions = F2(
 	});
 var _rtfeldman$html_test_runner$Test_Runner_Html$run = A2(_rtfeldman$html_test_runner$Test_Runner_Html$runWithOptions, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing);
 
-var _user$project$Player$calculateCombo = function (player) {
-	var _p0 = player.comboSum;
-	var sumLength = _p0._0;
-	var sumCount = _p0._1;
-	var sum = sumLength * sumCount;
-	var _p1 = player.comboMultiple;
-	var multipleLength = _p1._0;
-	var multipleCount = _p1._1;
-	var multiple = _elm_lang$core$Native_Utils.eq(multipleCount, 0) ? 0 : Math.pow(multipleLength, multipleCount);
-	return multiple + sum;
+var _user$project$Coin$isHit = function (coin) {
+	var _p0 = coin;
+	switch (_p0.ctor) {
+		case 'Core':
+			return false;
+		case 'Entry':
+			return function (_) {
+				return _.hitted;
+			}(_p0._0);
+		default:
+			return function (_) {
+				return _.hitted;
+			}(_p0._0);
+	}
 };
-var _user$project$Player$updatePoint = function (player) {
-	return _elm_lang$core$Native_Utils.update(
-		player,
-		{
-			point: player.goal + _user$project$Player$calculateCombo(player)
-		});
+var _user$project$Coin$counter = function (coin) {
+	var _p1 = coin;
+	switch (_p1.ctor) {
+		case 'Core':
+			return _elm_lang$core$Maybe$Nothing;
+		case 'Entry':
+			return _elm_lang$core$Maybe$Nothing;
+		default:
+			return _elm_lang$core$Maybe$Just(
+				function (_) {
+					return _.counter;
+				}(_p1._0));
+	}
 };
-var _user$project$Player$sumHand = function (player) {
-	return _elm_lang$core$List$sum(player.hand);
+var _user$project$Coin$alive = function (coin) {
+	var _p2 = coin;
+	switch (_p2.ctor) {
+		case 'Core':
+			return true;
+		case 'Entry':
+			return true;
+		default:
+			return function (_) {
+				return _.alive;
+			}(_p2._0);
+	}
 };
-var _user$project$Player$factor = function (player) {
-	return (_user$project$Player$sumHand(player) / player.goal) | 0;
+var _user$project$Coin$value = function (coin) {
+	var _p3 = coin;
+	switch (_p3.ctor) {
+		case 'Core':
+			return function (_) {
+				return _.value;
+			}(_p3._0);
+		case 'Entry':
+			return function (_) {
+				return _.value;
+			}(_p3._0);
+		default:
+			return function (_) {
+				return _.value;
+			}(_p3._0);
+	}
 };
-var _user$project$Player$rem = function (player) {
-	return A2(
-		_elm_lang$core$Basics_ops['%'],
-		_user$project$Player$sumHand(player),
-		player.goal);
+var _user$project$Coin$max_counter = 8;
+var _user$project$Coin$min_counter = 0;
+var _user$project$Coin$max_value = 9;
+var _user$project$Coin$min_value = 1;
+var _user$project$Coin$CoreCoin = function (a) {
+	return {value: a};
 };
-var _user$project$Player$isGoalReach = function (player) {
-	return (_elm_lang$core$Native_Utils.cmp(
-		_user$project$Player$factor(player),
-		0) > 0) && _elm_lang$core$Native_Utils.eq(
-		_user$project$Player$rem(player),
-		0);
-};
-var _user$project$Player$countHand = function (player) {
-	return _elm_lang$core$List$length(player.hand);
-};
-var _user$project$Player$updateCombo = function (player) {
-	var _p2 = player.comboSum;
-	var sumLength2 = _p2._0;
-	var sumCount = _p2._1;
-	var _p3 = player.comboMultiple;
-	var multipleLength2 = _p3._0;
-	var multipleCount = _p3._1;
-	var sumLength1 = _user$project$Player$countHand(player);
-	var updatedSum = _elm_lang$core$Native_Utils.eq(sumLength1, sumLength2) ? {ctor: '_Tuple2', _0: sumLength1, _1: sumCount + 1} : {ctor: '_Tuple2', _0: sumLength1, _1: 0};
-	var multipleLength1 = _user$project$Player$factor(player);
-	var updatedMultiple = _elm_lang$core$Native_Utils.eq(multipleLength1, multipleLength2) ? {ctor: '_Tuple2', _0: multipleLength1, _1: multipleCount + 1} : {ctor: '_Tuple2', _0: multipleLength1, _1: 0};
-	return _elm_lang$core$Native_Utils.update(
-		player,
-		{comboMultiple: updatedMultiple, comboSum: updatedSum});
-};
-var _user$project$Player$resetHand = function (player) {
-	return _elm_lang$core$Native_Utils.update(
-		player,
-		{
-			hand: {ctor: '[]'}
-		});
-};
-var _user$project$Player$addHand = F2(
-	function (value, player) {
-		return _elm_lang$core$Native_Utils.update(
-			player,
-			{
-				hand: {ctor: '::', _0: value, _1: player.hand}
-			});
+var _user$project$Coin$EntryCoin = F2(
+	function (a, b) {
+		return {value: a, hitted: b};
 	});
-var _user$project$Player$Player = F5(
-	function (a, b, c, d, e) {
-		return {hand: a, goal: b, point: c, comboSum: d, comboMultiple: e};
+var _user$project$Coin$BorderCoin = F4(
+	function (a, b, c, d) {
+		return {value: a, hitted: b, alive: c, counter: d};
+	});
+var _user$project$Coin$Border = function (a) {
+	return {ctor: 'Border', _0: a};
+};
+var _user$project$Coin$Entry = function (a) {
+	return {ctor: 'Entry', _0: a};
+};
+var _user$project$Coin$Core = function (a) {
+	return {ctor: 'Core', _0: a};
+};
+var _user$project$Coin$set = F2(
+	function (x, coin) {
+		if (_elm_lang$core$Native_Utils.cmp(x, _user$project$Coin$min_value) < 0) {
+			return _elm_lang$core$Result$Err(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'x must be > ',
+					_elm_lang$core$Basics$toString(_user$project$Coin$min_value)));
+		} else {
+			if (_elm_lang$core$Native_Utils.cmp(x, _user$project$Coin$max_value) > 0) {
+				return _elm_lang$core$Result$Err(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'x must be < ',
+						_elm_lang$core$Basics$toString(_user$project$Coin$max_value)));
+			} else {
+				var _p4 = coin;
+				switch (_p4.ctor) {
+					case 'Core':
+						return _elm_lang$core$Result$Ok(
+							_user$project$Coin$Core(
+								_elm_lang$core$Native_Utils.update(
+									_p4._0,
+									{value: x})));
+					case 'Entry':
+						return _elm_lang$core$Result$Ok(
+							_user$project$Coin$Entry(
+								_elm_lang$core$Native_Utils.update(
+									_p4._0,
+									{value: x})));
+					default:
+						return _elm_lang$core$Result$Ok(
+							_user$project$Coin$Border(
+								_elm_lang$core$Native_Utils.update(
+									_p4._0,
+									{value: x})));
+				}
+			}
+		}
+	});
+var _user$project$Coin$kill = function (coin) {
+	var _p5 = coin;
+	switch (_p5.ctor) {
+		case 'Core':
+			return _user$project$Coin$Core(_p5._0);
+		case 'Entry':
+			return _user$project$Coin$Entry(_p5._0);
+		default:
+			return _user$project$Coin$Border(
+				_elm_lang$core$Native_Utils.update(
+					_p5._0,
+					{alive: false}));
+	}
+};
+var _user$project$Coin$revive = function (coin) {
+	var _p6 = coin;
+	switch (_p6.ctor) {
+		case 'Core':
+			return _user$project$Coin$Core(_p6._0);
+		case 'Entry':
+			return _user$project$Coin$Entry(_p6._0);
+		default:
+			return _user$project$Coin$Border(
+				_elm_lang$core$Native_Utils.update(
+					_p6._0,
+					{alive: true}));
+	}
+};
+var _user$project$Coin$hit = function (coin) {
+	var _p7 = coin;
+	switch (_p7.ctor) {
+		case 'Core':
+			return _user$project$Coin$Core(_p7._0);
+		case 'Entry':
+			return _user$project$Coin$Entry(
+				_elm_lang$core$Native_Utils.update(
+					_p7._0,
+					{hitted: true}));
+		default:
+			return _user$project$Coin$Border(
+				_elm_lang$core$Native_Utils.update(
+					_p7._0,
+					{hitted: true}));
+	}
+};
+var _user$project$Coin$unhit = function (coin) {
+	var _p8 = coin;
+	switch (_p8.ctor) {
+		case 'Core':
+			return _user$project$Coin$Core(_p8._0);
+		case 'Entry':
+			return _user$project$Coin$Entry(
+				_elm_lang$core$Native_Utils.update(
+					_p8._0,
+					{hitted: false}));
+		default:
+			return _user$project$Coin$Border(
+				_elm_lang$core$Native_Utils.update(
+					_p8._0,
+					{hitted: false}));
+	}
+};
+var _user$project$Coin$next = F2(
+	function (value, coin) {
+		var _p9 = coin;
+		switch (_p9.ctor) {
+			case 'Core':
+				return A2(
+					_elm_lang$core$Result$withDefault,
+					coin,
+					A2(
+						_user$project$Coin$set,
+						value,
+						_user$project$Coin$Core(_p9._0)));
+			case 'Entry':
+				return _user$project$Coin$unhit(
+					_user$project$Coin$Entry(_p9._0));
+			default:
+				var _p10 = _p9._0;
+				var incValue = function (border) {
+					return _elm_lang$core$Native_Utils.update(
+						border,
+						{value: border.value + 1});
+				};
+				var incCounter = function (border) {
+					return _elm_lang$core$Native_Utils.update(
+						border,
+						{counter: border.counter + 1});
+				};
+				var resetCounter = function (border) {
+					return _elm_lang$core$Native_Utils.update(
+						border,
+						{counter: _user$project$Coin$min_counter});
+				};
+				var isDead = !_p10.alive;
+				var isHit = _p10.hitted;
+				var isToBig = _elm_lang$core$Native_Utils.cmp(_p10.value + 1, _user$project$Coin$max_value) > 0;
+				var isCounterOver = _elm_lang$core$Native_Utils.cmp(_p10.counter + 1, _user$project$Coin$max_counter) > -1;
+				return isCounterOver ? A2(
+					_elm_lang$core$Result$withDefault,
+					coin,
+					A2(
+						_user$project$Coin$set,
+						value,
+						_user$project$Coin$revive(
+							_user$project$Coin$unhit(
+								_user$project$Coin$Border(
+									resetCounter(_p10)))))) : ((isToBig || isHit) ? _user$project$Coin$kill(
+					_user$project$Coin$Border(
+						resetCounter(_p10))) : (isDead ? _user$project$Coin$Border(
+					incCounter(_p10)) : _user$project$Coin$Border(
+					incValue(_p10))));
+		}
 	});
 
-var _user$project$PlayerTests$updatePointTest = A2(
+var _user$project$CoinTests$nextTest = A2(
 	_elm_community$elm_test$Test$describe,
-	'updatePoint',
+	'next',
 	{
 		ctor: '::',
 		_0: function () {
-			var player2 = A5(
-				_user$project$Player$Player,
-				{ctor: '[]'},
-				3,
-				3,
-				{ctor: '_Tuple2', _0: 0, _1: 0},
-				{ctor: '_Tuple2', _0: 0, _1: 0});
-			var player1 = A5(
-				_user$project$Player$Player,
-				{ctor: '[]'},
-				3,
-				0,
-				{ctor: '_Tuple2', _0: 0, _1: 0},
-				{ctor: '_Tuple2', _0: 0, _1: 0});
+			var coin2 = _user$project$Coin$Core(
+				_user$project$Coin$CoreCoin(2));
+			var coin1 = _user$project$Coin$Core(
+				_user$project$Coin$CoreCoin(1));
 			return A2(
 				_elm_community$elm_test$Test$test,
-				'output is  player2 when input is player1',
+				'output is coin2 when input is 2 and coin1',
 				function (_p0) {
 					var _p1 = _p0;
 					return A2(
 						_elm_community$elm_test$Expect$equal,
-						player2,
-						_user$project$Player$updatePoint(player1));
+						coin2,
+						A2(_user$project$Coin$next, 2, coin1));
 				});
 		}(),
 		_1: {
 			ctor: '::',
 			_0: function () {
-				var player2 = A5(
-					_user$project$Player$Player,
-					{ctor: '[]'},
-					1,
-					41,
-					{ctor: '_Tuple2', _0: 0, _1: 0},
-					{ctor: '_Tuple2', _0: 0, _1: 0});
-				var player1 = A5(
-					_user$project$Player$Player,
-					{ctor: '[]'},
-					1,
-					20,
-					{ctor: '_Tuple2', _0: 4, _1: 3},
-					{ctor: '_Tuple2', _0: 2, _1: 3});
+				var coin2 = _user$project$Coin$Entry(
+					A2(_user$project$Coin$EntryCoin, 1, false));
+				var coin1 = _user$project$Coin$Entry(
+					A2(_user$project$Coin$EntryCoin, 1, true));
 				return A2(
 					_elm_community$elm_test$Test$test,
-					'output is player2 when input is player1',
+					'output is coin2 when input is 2 and coin1',
 					function (_p2) {
 						var _p3 = _p2;
 						return A2(
 							_elm_community$elm_test$Expect$equal,
-							player2,
-							_user$project$Player$updatePoint(player1));
+							coin2,
+							A2(_user$project$Coin$next, 2, coin1));
 					});
 			}(),
 			_1: {ctor: '[]'}
 		}
 	});
-var _user$project$PlayerTests$calculateComboTest = A2(
+var _user$project$CoinTests$borderFixture4 = _user$project$Coin$Border(
+	A4(_user$project$Coin$BorderCoin, 1, false, true, 9));
+var _user$project$CoinTests$borderFixture3 = _user$project$Coin$Border(
+	A4(_user$project$Coin$BorderCoin, 1, false, false, 1));
+var _user$project$CoinTests$borderFixture2 = _user$project$Coin$Border(
+	A4(_user$project$Coin$BorderCoin, 1, true, false, 1));
+var _user$project$CoinTests$borderFixture1 = _user$project$Coin$Border(
+	A4(_user$project$Coin$BorderCoin, 1, true, true, 1));
+var _user$project$CoinTests$entryFixture2 = _user$project$Coin$Entry(
+	A2(_user$project$Coin$EntryCoin, 1, true));
+var _user$project$CoinTests$entryFixture1 = _user$project$Coin$Entry(
+	A2(_user$project$Coin$EntryCoin, 1, false));
+var _user$project$CoinTests$coreFixture2 = _user$project$Coin$Core(
+	_user$project$Coin$CoreCoin(2));
+var _user$project$CoinTests$coreFixture1 = _user$project$Coin$Core(
+	_user$project$Coin$CoreCoin(1));
+var _user$project$CoinTests$valueTest = A2(
 	_elm_community$elm_test$Test$describe,
-	'calculateCombo',
-	{
-		ctor: '::',
-		_0: function () {
-			var player1 = A5(
-				_user$project$Player$Player,
-				{ctor: '[]'},
-				0,
-				0,
-				{ctor: '_Tuple2', _0: 0, _1: 0},
-				{ctor: '_Tuple2', _0: 0, _1: 0});
-			return A2(
-				_elm_community$elm_test$Test$test,
-				'output is 0 when input is player1',
-				function (_p4) {
-					var _p5 = _p4;
-					return A2(
-						_elm_community$elm_test$Expect$equal,
-						0,
-						_user$project$Player$calculateCombo(player1));
-				});
-		}(),
-		_1: {
-			ctor: '::',
-			_0: function () {
-				var player1 = A5(
-					_user$project$Player$Player,
-					{ctor: '[]'},
-					0,
-					0,
-					{ctor: '_Tuple2', _0: 4, _1: 3},
-					{ctor: '_Tuple2', _0: 2, _1: 3});
-				return A2(
-					_elm_community$elm_test$Test$test,
-					'output is 20 when input is player1',
-					function (_p6) {
-						var _p7 = _p6;
-						return A2(
-							_elm_community$elm_test$Expect$equal,
-							20,
-							_user$project$Player$calculateCombo(player1));
-					});
-			}(),
-			_1: {ctor: '[]'}
-		}
-	});
-var _user$project$PlayerTests$updateComboTest = A2(
-	_elm_community$elm_test$Test$describe,
-	'updateCombo',
-	{
-		ctor: '::',
-		_0: function () {
-			var player2 = A5(
-				_user$project$Player$Player,
-				{
-					ctor: '::',
-					_0: 1,
-					_1: {
-						ctor: '::',
-						_0: 2,
-						_1: {
-							ctor: '::',
-							_0: 3,
-							_1: {ctor: '[]'}
-						}
-					}
-				},
-				3,
-				0,
-				{ctor: '_Tuple2', _0: 3, _1: 0},
-				{ctor: '_Tuple2', _0: 2, _1: 0});
-			var player1 = A5(
-				_user$project$Player$Player,
-				{
-					ctor: '::',
-					_0: 1,
-					_1: {
-						ctor: '::',
-						_0: 2,
-						_1: {
-							ctor: '::',
-							_0: 3,
-							_1: {ctor: '[]'}
-						}
-					}
-				},
-				3,
-				0,
-				{ctor: '_Tuple2', _0: 0, _1: 0},
-				{ctor: '_Tuple2', _0: 0, _1: 0});
-			return A2(
-				_elm_community$elm_test$Test$test,
-				'output is player2 when input is player1',
-				function (_p8) {
-					var _p9 = _p8;
-					return A2(
-						_elm_community$elm_test$Expect$equal,
-						player2,
-						_user$project$Player$updateCombo(player1));
-				});
-		}(),
-		_1: {
-			ctor: '::',
-			_0: function () {
-				var player2 = A5(
-					_user$project$Player$Player,
-					{
-						ctor: '::',
-						_0: 1,
-						_1: {
-							ctor: '::',
-							_0: 2,
-							_1: {
-								ctor: '::',
-								_0: 3,
-								_1: {ctor: '[]'}
-							}
-						}
-					},
-					3,
-					0,
-					{ctor: '_Tuple2', _0: 3, _1: 1},
-					{ctor: '_Tuple2', _0: 2, _1: 1});
-				var player1 = A5(
-					_user$project$Player$Player,
-					{
-						ctor: '::',
-						_0: 1,
-						_1: {
-							ctor: '::',
-							_0: 2,
-							_1: {
-								ctor: '::',
-								_0: 3,
-								_1: {ctor: '[]'}
-							}
-						}
-					},
-					3,
-					0,
-					{ctor: '_Tuple2', _0: 3, _1: 0},
-					{ctor: '_Tuple2', _0: 2, _1: 0});
-				return A2(
-					_elm_community$elm_test$Test$test,
-					'output is player2 when input is player1',
-					function (_p10) {
-						var _p11 = _p10;
-						return A2(
-							_elm_community$elm_test$Expect$equal,
-							player2,
-							_user$project$Player$updateCombo(player1));
-					});
-			}(),
-			_1: {ctor: '[]'}
-		}
-	});
-var _user$project$PlayerTests$playerFixture4 = A5(
-	_user$project$Player$Player,
-	{
-		ctor: '::',
-		_0: 2,
-		_1: {
-			ctor: '::',
-			_0: 7,
-			_1: {ctor: '[]'}
-		}
-	},
-	5,
-	0,
-	{ctor: '_Tuple2', _0: 0, _1: 0},
-	{ctor: '_Tuple2', _0: 0, _1: 0});
-var _user$project$PlayerTests$playerFixture3 = A5(
-	_user$project$Player$Player,
-	{ctor: '[]'},
-	5,
-	0,
-	{ctor: '_Tuple2', _0: 0, _1: 0},
-	{ctor: '_Tuple2', _0: 0, _1: 0});
-var _user$project$PlayerTests$playerFixture2 = A5(
-	_user$project$Player$Player,
-	{
-		ctor: '::',
-		_0: 7,
-		_1: {
-			ctor: '::',
-			_0: 2,
-			_1: {
-				ctor: '::',
-				_0: 3,
-				_1: {ctor: '[]'}
-			}
-		}
-	},
-	5,
-	0,
-	{ctor: '_Tuple2', _0: 0, _1: 0},
-	{ctor: '_Tuple2', _0: 0, _1: 0});
-var _user$project$PlayerTests$playerFixture1 = A5(
-	_user$project$Player$Player,
-	{
-		ctor: '::',
-		_0: 2,
-		_1: {
-			ctor: '::',
-			_0: 3,
-			_1: {ctor: '[]'}
-		}
-	},
-	5,
-	0,
-	{ctor: '_Tuple2', _0: 0, _1: 0},
-	{ctor: '_Tuple2', _0: 0, _1: 0});
-var _user$project$PlayerTests$addHandTest = A2(
-	_elm_community$elm_test$Test$describe,
-	'addHand',
+	'value',
 	{
 		ctor: '::',
 		_0: A2(
 			_elm_community$elm_test$Test$test,
-			'output is playerFixture2 when input is 7 and playerFixture1',
-			function (_p12) {
-				var _p13 = _p12;
-				return A2(
-					_elm_community$elm_test$Expect$equal,
-					_user$project$PlayerTests$playerFixture2,
-					A2(_user$project$Player$addHand, 7, _user$project$PlayerTests$playerFixture1));
-			}),
-		_1: {ctor: '[]'}
-	});
-var _user$project$PlayerTests$resetHandTest = A2(
-	_elm_community$elm_test$Test$describe,
-	'addHand',
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_community$elm_test$Test$test,
-			'output is playerFixture3 when input is playerFixture1',
-			function (_p14) {
-				var _p15 = _p14;
-				return A2(
-					_elm_community$elm_test$Expect$equal,
-					_user$project$PlayerTests$playerFixture3,
-					_user$project$Player$resetHand(_user$project$PlayerTests$playerFixture1));
-			}),
-		_1: {ctor: '[]'}
-	});
-var _user$project$PlayerTests$countHandTest = A2(
-	_elm_community$elm_test$Test$describe,
-	'countHand',
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_community$elm_test$Test$test,
-			'output is 2 when input is playerFixture1',
-			function (_p16) {
-				var _p17 = _p16;
-				return A2(
-					_elm_community$elm_test$Expect$equal,
-					2,
-					_user$project$Player$countHand(_user$project$PlayerTests$playerFixture1));
-			}),
-		_1: {ctor: '[]'}
-	});
-var _user$project$PlayerTests$sumHandTest = A2(
-	_elm_community$elm_test$Test$describe,
-	'sumHand',
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_community$elm_test$Test$test,
-			'output is 5 when input is playerFixture1',
-			function (_p18) {
-				var _p19 = _p18;
-				return A2(
-					_elm_community$elm_test$Expect$equal,
-					5,
-					_user$project$Player$sumHand(_user$project$PlayerTests$playerFixture1));
-			}),
-		_1: {ctor: '[]'}
-	});
-var _user$project$PlayerTests$factorTest = A2(
-	_elm_community$elm_test$Test$describe,
-	'factor',
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_community$elm_test$Test$test,
-			'output is 1 when input is playerFixture1',
-			function (_p20) {
-				var _p21 = _p20;
+			'output is 1 when input is coreFixture',
+			function (_p4) {
+				var _p5 = _p4;
 				return A2(
 					_elm_community$elm_test$Expect$equal,
 					1,
-					_user$project$Player$factor(_user$project$PlayerTests$playerFixture1));
+					_user$project$Coin$value(_user$project$CoinTests$coreFixture1));
 			}),
 		_1: {
 			ctor: '::',
 			_0: A2(
 				_elm_community$elm_test$Test$test,
-				'output is 2 when input is playerFixture2',
-				function (_p22) {
-					var _p23 = _p22;
+				'output is 1 when input is entryFixture1',
+				function (_p6) {
+					var _p7 = _p6;
 					return A2(
 						_elm_community$elm_test$Expect$equal,
-						2,
-						_user$project$Player$factor(_user$project$PlayerTests$playerFixture2));
-				}),
-			_1: {ctor: '[]'}
-		}
-	});
-var _user$project$PlayerTests$remTest = A2(
-	_elm_community$elm_test$Test$describe,
-	'rem',
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_community$elm_test$Test$test,
-			'output is 0 when input is playerFixture1',
-			function (_p24) {
-				var _p25 = _p24;
-				return A2(
-					_elm_community$elm_test$Expect$equal,
-					0,
-					_user$project$Player$rem(_user$project$PlayerTests$playerFixture1));
-			}),
-		_1: {
-			ctor: '::',
-			_0: A2(
-				_elm_community$elm_test$Test$test,
-				'output is 4 when input is playerFixture3',
-				function (_p26) {
-					var _p27 = _p26;
-					return A2(
-						_elm_community$elm_test$Expect$equal,
-						4,
-						_user$project$Player$rem(_user$project$PlayerTests$playerFixture4));
-				}),
-			_1: {ctor: '[]'}
-		}
-	});
-var _user$project$PlayerTests$isGoalReachTest = A2(
-	_elm_community$elm_test$Test$describe,
-	'isGoalReach',
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_community$elm_test$Test$test,
-			'output is True when input is playerFixture1',
-			function (_p28) {
-				var _p29 = _p28;
-				return A2(
-					_elm_community$elm_test$Expect$equal,
-					true,
-					_user$project$Player$isGoalReach(_user$project$PlayerTests$playerFixture1));
-			}),
-		_1: {
-			ctor: '::',
-			_0: A2(
-				_elm_community$elm_test$Test$test,
-				'output is False when input is playerFixture3',
-				function (_p30) {
-					var _p31 = _p30;
-					return A2(
-						_elm_community$elm_test$Expect$equal,
-						false,
-						_user$project$Player$isGoalReach(_user$project$PlayerTests$playerFixture3));
+						1,
+						_user$project$Coin$value(_user$project$CoinTests$entryFixture1));
 				}),
 			_1: {
 				ctor: '::',
 				_0: A2(
 					_elm_community$elm_test$Test$test,
-					'output is False when input is playerFixture4',
-					function (_p32) {
-						var _p33 = _p32;
+					'output is 1 when input is borderFixture1',
+					function (_p8) {
+						var _p9 = _p8;
 						return A2(
 							_elm_community$elm_test$Expect$equal,
-							false,
-							_user$project$Player$isGoalReach(_user$project$PlayerTests$playerFixture4));
+							1,
+							_user$project$Coin$value(_user$project$CoinTests$borderFixture1));
 					}),
 				_1: {ctor: '[]'}
 			}
 		}
 	});
-var _user$project$PlayerTests$main = _rtfeldman$html_test_runner$Test_Runner_Html$run(
-	A2(
-		_elm_community$elm_test$Test$describe,
-		'playerModule',
-		{
+var _user$project$CoinTests$aliveTest = A2(
+	_elm_community$elm_test$Test$describe,
+	'alive',
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_community$elm_test$Test$test,
+			'output is True when input is coreFixture',
+			function (_p10) {
+				var _p11 = _p10;
+				return A2(
+					_elm_community$elm_test$Expect$equal,
+					true,
+					_user$project$Coin$alive(_user$project$CoinTests$coreFixture1));
+			}),
+		_1: {
 			ctor: '::',
-			_0: _user$project$PlayerTests$addHandTest,
+			_0: A2(
+				_elm_community$elm_test$Test$test,
+				'output is True when input is entryFixture1',
+				function (_p12) {
+					var _p13 = _p12;
+					return A2(
+						_elm_community$elm_test$Expect$equal,
+						true,
+						_user$project$Coin$alive(_user$project$CoinTests$entryFixture1));
+				}),
 			_1: {
 				ctor: '::',
-				_0: _user$project$PlayerTests$resetHandTest,
+				_0: A2(
+					_elm_community$elm_test$Test$test,
+					'output is True when input is borderFixture1',
+					function (_p14) {
+						var _p15 = _p14;
+						return A2(
+							_elm_community$elm_test$Expect$equal,
+							true,
+							_user$project$Coin$alive(_user$project$CoinTests$borderFixture1));
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _user$project$CoinTests$counterTest = A2(
+	_elm_community$elm_test$Test$describe,
+	'counter',
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_community$elm_test$Test$test,
+			'output is True when input is coreFixture',
+			function (_p16) {
+				var _p17 = _p16;
+				return A2(
+					_elm_community$elm_test$Expect$equal,
+					_elm_lang$core$Maybe$Nothing,
+					_user$project$Coin$counter(_user$project$CoinTests$coreFixture1));
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_community$elm_test$Test$test,
+				'output is True when input is entryFixture1',
+				function (_p18) {
+					var _p19 = _p18;
+					return A2(
+						_elm_community$elm_test$Expect$equal,
+						_elm_lang$core$Maybe$Nothing,
+						_user$project$Coin$counter(_user$project$CoinTests$entryFixture1));
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_community$elm_test$Test$test,
+					'output is True when input is borderFixture1',
+					function (_p20) {
+						var _p21 = _p20;
+						return A2(
+							_elm_community$elm_test$Expect$equal,
+							_elm_lang$core$Maybe$Just(1),
+							_user$project$Coin$counter(_user$project$CoinTests$borderFixture1));
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _user$project$CoinTests$isHitTest = A2(
+	_elm_community$elm_test$Test$describe,
+	'isHit',
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_community$elm_test$Test$test,
+			'output is False when input is coreFixture1',
+			function (_p22) {
+				var _p23 = _p22;
+				return A2(
+					_elm_community$elm_test$Expect$equal,
+					false,
+					_user$project$Coin$isHit(_user$project$CoinTests$coreFixture1));
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_community$elm_test$Test$test,
+				'output is False when input is entryFixture1',
+				function (_p24) {
+					var _p25 = _p24;
+					return A2(
+						_elm_community$elm_test$Expect$equal,
+						false,
+						_user$project$Coin$isHit(_user$project$CoinTests$entryFixture1));
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_community$elm_test$Test$test,
+					'output is False when input is borderFixture1',
+					function (_p26) {
+						var _p27 = _p26;
+						return A2(
+							_elm_community$elm_test$Expect$equal,
+							true,
+							_user$project$Coin$isHit(_user$project$CoinTests$borderFixture1));
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _user$project$CoinTests$setTest = A2(
+	_elm_community$elm_test$Test$describe,
+	'set',
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_community$elm_test$Test$test,
+			'output is error when input is 0 and coreFixture1',
+			function (_p28) {
+				var _p29 = _p28;
+				return A2(
+					_elm_community$elm_test$Expect$equal,
+					_elm_lang$core$Result$Err('x must be > 1'),
+					A2(_user$project$Coin$set, 0, _user$project$CoinTests$coreFixture1));
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_community$elm_test$Test$test,
+				'output is error when input is 10 and coreFixture1',
+				function (_p30) {
+					var _p31 = _p30;
+					return A2(
+						_elm_community$elm_test$Expect$equal,
+						_elm_lang$core$Result$Err('x must be < 9'),
+						A2(_user$project$Coin$set, 10, _user$project$CoinTests$coreFixture1));
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_community$elm_test$Test$test,
+					'output is Core 1 when input is 1 and coreFixture1',
+					function (_p32) {
+						var _p33 = _p32;
+						return A2(
+							_elm_community$elm_test$Expect$equal,
+							_elm_lang$core$Result$Ok(
+								_user$project$Coin$Core(
+									_user$project$Coin$CoreCoin(1))),
+							A2(_user$project$Coin$set, 1, _user$project$CoinTests$coreFixture1));
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _user$project$CoinTests$killTest = A2(
+	_elm_community$elm_test$Test$describe,
+	'kill',
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_community$elm_test$Test$test,
+			'output is coreFixture1 when input is coreFixture1',
+			function (_p34) {
+				var _p35 = _p34;
+				return A2(
+					_elm_community$elm_test$Expect$equal,
+					_user$project$CoinTests$coreFixture1,
+					_user$project$Coin$kill(_user$project$CoinTests$coreFixture1));
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_community$elm_test$Test$test,
+				'output is entryFixture1 when input is and entryFixture1',
+				function (_p36) {
+					var _p37 = _p36;
+					return A2(
+						_elm_community$elm_test$Expect$equal,
+						_user$project$CoinTests$entryFixture1,
+						_user$project$Coin$kill(_user$project$CoinTests$entryFixture1));
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_community$elm_test$Test$test,
+					'output is borderFixture2 when input is and borderFixture1',
+					function (_p38) {
+						var _p39 = _p38;
+						return A2(
+							_elm_community$elm_test$Expect$equal,
+							_user$project$CoinTests$borderFixture2,
+							_user$project$Coin$kill(_user$project$CoinTests$borderFixture1));
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _user$project$CoinTests$reviveTest = A2(
+	_elm_community$elm_test$Test$describe,
+	'revive',
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_community$elm_test$Test$test,
+			'output is coreFixture1 when input is coreFixture1',
+			function (_p40) {
+				var _p41 = _p40;
+				return A2(
+					_elm_community$elm_test$Expect$equal,
+					_user$project$CoinTests$coreFixture1,
+					_user$project$Coin$revive(_user$project$CoinTests$coreFixture1));
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_community$elm_test$Test$test,
+				'output is entryFixture1 when input is and entryFixture1',
+				function (_p42) {
+					var _p43 = _p42;
+					return A2(
+						_elm_community$elm_test$Expect$equal,
+						_user$project$CoinTests$entryFixture1,
+						_user$project$Coin$revive(_user$project$CoinTests$entryFixture1));
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_community$elm_test$Test$test,
+					'output is borderFixture1 when input is and borderFixture2',
+					function (_p44) {
+						var _p45 = _p44;
+						return A2(
+							_elm_community$elm_test$Expect$equal,
+							_user$project$CoinTests$borderFixture1,
+							_user$project$Coin$revive(_user$project$CoinTests$borderFixture2));
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _user$project$CoinTests$hitTest = A2(
+	_elm_community$elm_test$Test$describe,
+	'hit',
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_community$elm_test$Test$test,
+			'output is coreFixture1 when input is coreFixture1',
+			function (_p46) {
+				var _p47 = _p46;
+				return A2(
+					_elm_community$elm_test$Expect$equal,
+					_user$project$CoinTests$coreFixture1,
+					_user$project$Coin$hit(_user$project$CoinTests$coreFixture1));
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_community$elm_test$Test$test,
+				'output is entryFixture2 when input is entryFixture1',
+				function (_p48) {
+					var _p49 = _p48;
+					return A2(
+						_elm_community$elm_test$Expect$equal,
+						_user$project$CoinTests$entryFixture2,
+						_user$project$Coin$hit(_user$project$CoinTests$entryFixture1));
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_community$elm_test$Test$test,
+					'output is borderFixture1 when input is borderFixture1',
+					function (_p50) {
+						var _p51 = _p50;
+						return A2(
+							_elm_community$elm_test$Expect$equal,
+							_user$project$CoinTests$borderFixture1,
+							_user$project$Coin$hit(_user$project$CoinTests$borderFixture1));
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _user$project$CoinTests$unhitTest = A2(
+	_elm_community$elm_test$Test$describe,
+	'unhit',
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_community$elm_test$Test$test,
+			'output is coreFixture1 when input is coreFixture1',
+			function (_p52) {
+				var _p53 = _p52;
+				return A2(
+					_elm_community$elm_test$Expect$equal,
+					_user$project$CoinTests$coreFixture1,
+					_user$project$Coin$unhit(_user$project$CoinTests$coreFixture1));
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_community$elm_test$Test$test,
+				'output is entryFixture2 when input is entryFixture1',
+				function (_p54) {
+					var _p55 = _p54;
+					return A2(
+						_elm_community$elm_test$Expect$equal,
+						_user$project$CoinTests$entryFixture1,
+						_user$project$Coin$unhit(_user$project$CoinTests$entryFixture2));
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_community$elm_test$Test$test,
+					'output is borderFixture3 when input is borderFixture2',
+					function (_p56) {
+						var _p57 = _p56;
+						return A2(
+							_elm_community$elm_test$Expect$equal,
+							_user$project$CoinTests$borderFixture3,
+							_user$project$Coin$unhit(_user$project$CoinTests$borderFixture2));
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _user$project$CoinTests$main = _rtfeldman$html_test_runner$Test_Runner_Html$run(
+	A2(
+		_elm_community$elm_test$Test$describe,
+		'CoinModule',
+		{
+			ctor: '::',
+			_0: _user$project$CoinTests$valueTest,
+			_1: {
+				ctor: '::',
+				_0: _user$project$CoinTests$aliveTest,
 				_1: {
 					ctor: '::',
-					_0: _user$project$PlayerTests$countHandTest,
+					_0: _user$project$CoinTests$counterTest,
 					_1: {
 						ctor: '::',
-						_0: _user$project$PlayerTests$sumHandTest,
+						_0: _user$project$CoinTests$isHitTest,
 						_1: {
 							ctor: '::',
-							_0: _user$project$PlayerTests$factorTest,
+							_0: _user$project$CoinTests$setTest,
 							_1: {
 								ctor: '::',
-								_0: _user$project$PlayerTests$remTest,
+								_0: _user$project$CoinTests$killTest,
 								_1: {
 									ctor: '::',
-									_0: _user$project$PlayerTests$isGoalReachTest,
+									_0: _user$project$CoinTests$reviveTest,
 									_1: {
 										ctor: '::',
-										_0: _user$project$PlayerTests$updateComboTest,
+										_0: _user$project$CoinTests$hitTest,
 										_1: {
 											ctor: '::',
-											_0: _user$project$PlayerTests$calculateComboTest,
+											_0: _user$project$CoinTests$unhitTest,
 											_1: {
 												ctor: '::',
-												_0: _user$project$PlayerTests$updatePointTest,
+												_0: _user$project$CoinTests$nextTest,
 												_1: {ctor: '[]'}
 											}
 										}
@@ -14728,9 +14891,9 @@ var _user$project$PlayerTests$main = _rtfeldman$html_test_runner$Test_Runner_Htm
 		}))();
 
 var Elm = {};
-Elm['PlayerTests'] = Elm['PlayerTests'] || {};
-if (typeof _user$project$PlayerTests$main !== 'undefined') {
-    _user$project$PlayerTests$main(Elm['PlayerTests'], 'PlayerTests', undefined);
+Elm['CoinTests'] = Elm['CoinTests'] || {};
+if (typeof _user$project$CoinTests$main !== 'undefined') {
+    _user$project$CoinTests$main(Elm['CoinTests'], 'CoinTests', undefined);
 }
 
 if (typeof define === "function" && define['amd'])

@@ -126,4 +126,4 @@ next player value =
             updatePlayer =
                 player |> updateCombo |> updatePoint |> resetHand
         in
-            { player | goal = value }
+            { updatePlayer | goal = value }
