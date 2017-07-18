@@ -186,10 +186,10 @@ nextTest =
                     next 2 coin1 |> Expect.equal coin2
         , let
             coin1 =
-                Entry (EntryCoin 1 True )
+                Entry (EntryCoin 1 True)
 
             coin2 =
-                Entry (EntryCoin 1 False )
+                Entry (EntryCoin 1 False)
           in
             test "output is coin2 when input is 2 and coin1" <|
                 \() ->
@@ -199,12 +199,11 @@ nextTest =
                 Border (BorderCoin 1 False False max_counter)
 
             coin2 =
-                Border (BorderCoin 3 False True min_counter )
+                Border (BorderCoin 3 False True min_counter)
           in
             test "output is coin2 when input is 3 and coin1" <|
                 \() ->
                     next 3 coin1 |> Expect.equal coin2
-
         , let
             coin1 =
                 Border (BorderCoin 1 False False 0)
@@ -215,7 +214,6 @@ nextTest =
             test "output is coin2 when input is 3 and coin1" <|
                 \() ->
                     next 3 coin1 |> Expect.equal coin2
-
         , let
             coin1 =
                 Border (BorderCoin max_value True True 0)
@@ -226,7 +224,6 @@ nextTest =
             test "output is coin2 when input is 3 and coin1" <|
                 \() ->
                     next 3 coin1 |> Expect.equal coin2
-
         , let
             coin1 =
                 Border (BorderCoin 1 False True 0)
@@ -237,6 +234,41 @@ nextTest =
             test "output is coin2 when input is 3 and coin1" <|
                 \() ->
                     next 3 coin1 |> Expect.equal coin2
+        ]
+
+
+resetTest =
+    describe "reset"
+        [ let
+            coin1 =
+                Core (CoreCoin 1)
+
+            coin2 =
+                Core (CoreCoin 2)
+          in
+            test "output is coin2 when input is 2 and coin1" <|
+                \() ->
+                    reset 2 coin1 |> Expect.equal coin2
+        , let
+            coin1 =
+                Entry (EntryCoin 1 True)
+
+            coin2 =
+                Entry (EntryCoin 2 False)
+          in
+            test "output is coin2 when input is 3 and coin1" <|
+                \() ->
+                    reset 2 coin1 |> Expect.equal coin2
+        , let
+            coin1 =
+                Border (BorderCoin 1 False False 0)
+
+            coin2 =
+                Border (BorderCoin 2 False True 0)
+          in
+            test "output is coin2 when input is 3 and coin1" <|
+                \() ->
+                    reset 2 coin1 |> Expect.equal coin2
         ]
 
 
@@ -252,5 +284,6 @@ main =
             , reviveTest
             , hitTest
             , unhitTest
+            , resetTest
             , nextTest
             ]

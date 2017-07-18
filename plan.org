@@ -65,7 +65,6 @@
      get Coins -> Coin -> Coins
      set Coins -> Coin -> Coins
      
-
 * Player
 ** models
 *** Combo type

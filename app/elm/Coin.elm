@@ -161,6 +161,31 @@ unhit coin =
             Border { border | hitted = False }
 
 
+reset: Int -> Coin -> Coin
+reset value coin =
+    case coin of
+        Core core ->
+            Core core
+                |> set value
+                |> Result.withDefault coin
+                
+        Entry entry ->
+            Entry entry
+                |> set value
+                |> Result.withDefault coin
+                |> unhit
+
+        Border border ->
+            border
+                |> (\border -> { border | counter = min_counter })
+                |> Border
+                |> set value
+                |> Result.withDefault coin
+                |> unhit
+                |> revive
+
+    
+                
 next : Int -> Coin -> Coin
 next value coin =
     case coin of

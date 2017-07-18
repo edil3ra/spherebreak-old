@@ -88,6 +88,22 @@ set index coin coins =
         |> Array.toList
 
 
+
+reset : Random.Seed -> Coins -> Coins
+reset seed coins =
+    let
+        newValuesGen : Random.Generator (List Int)
+        newValuesGen =
+            Random.list (List.length coins) (Random.int min_value max_value)
+
+        newValues : List Int
+        newValues =
+            (Random.step newValuesGen seed) |> Tuple.first
+    in
+        List.map2 (\coin value -> Coin.reset value coin) coins newValues
+    
+
+           
 next : Random.Seed -> Coins -> Coins
 next seed coins =
     let

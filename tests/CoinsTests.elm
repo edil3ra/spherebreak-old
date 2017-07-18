@@ -105,6 +105,34 @@ setTest =
         ]
 
 
+resetTest =
+    describe "reset"
+        [ let
+            coinsFixtureInput =
+                [ Core (CoreCoin 1)
+                , Entry (EntryCoin 1 False)
+                , Border (BorderCoin 1 False False Coin.max_counter)
+                , Border (BorderCoin 1 False False 0)
+                , Border (BorderCoin 1 True True 0)
+                , Border (BorderCoin 1 False True 0)
+                ]
+
+            coinsFixtureResult =
+                [ Core (CoreCoin 3)
+                , Entry (EntryCoin 5 False)
+                , Border (BorderCoin 2 False True Coin.min_counter)
+                , Border (BorderCoin 9 False True Coin.min_counter)
+                , Border (BorderCoin 2 False True Coin.min_counter)
+                , Border (BorderCoin 8 False True Coin.min_counter)
+                ]
+          in
+            test "output is coinsFixtureResult when input is coinsFixtureInput" <|
+                \() ->
+                    reset (Random.initialSeed 1) coinsFixtureInput |> Expect.equal coinsFixtureResult
+        ]
+
+        
+
 nextTest =
     describe "next"
         [ let
@@ -132,6 +160,8 @@ nextTest =
         ]
 
 
+        
+
 main =
     run <|
         describe "CoinModule"
@@ -140,5 +170,6 @@ main =
             , bordersTest
             , getTest
             , setTest
+            , resetTest
             , nextTest
             ]
