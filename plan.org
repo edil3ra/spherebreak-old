@@ -72,7 +72,6 @@
     Multiple Int
     Count
     
-
 *** Player alias
   hand: List Int
   goal: Int
@@ -80,7 +79,6 @@
   compboPrevious: Combo
   comboCurrent: Combo
   comboLength: Int
-
 
 ** functions
   + addHand -> number -> Player (add number to hand)

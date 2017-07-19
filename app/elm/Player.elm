@@ -1,6 +1,5 @@
 module Player exposing (..)
 
-
 type alias ComboLength =
     Int
 
@@ -117,13 +116,15 @@ updatePoint player =
     { player | point = player.point + player.goal + (calculateCombo player) }
 
 
-next : Player -> Int -> Player
-next player value =
-    if not (isGoalReach player) then
+next: Int -> Player -> Player
+next value player =
         player
-    else
-        let
-            updatePlayer =
-                player |> updateCombo |> updatePoint |> resetHand
-        in
-            { updatePlayer | goal = value }
+            |> updateCombo
+            |> updatePoint
+            |> resetHand
+            |> \player -> {player | goal = value}
+
+
+reset : Int -> Player -> Player
+reset value player =
+    Player [] value 0 (0, 0) (0, 0)
