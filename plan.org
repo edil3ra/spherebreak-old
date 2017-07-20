@@ -135,7 +135,7 @@
 
    + Hit Coin 
      + when :: coin is dead
-       + Nopp 
+       + Noop 
      + when :: coin is alive
        + add number in the hand player
        + kill the coin

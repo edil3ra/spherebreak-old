@@ -115,6 +115,7 @@ updatePoint : Player -> Player
 updatePoint player =
     { player | point = player.point + player.goal + (calculateCombo player) }
 
+        
 
 next: Int -> Player -> Player
 next value player =

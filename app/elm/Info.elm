@@ -8,7 +8,7 @@ type Difficulty
 
 
 type alias Info =
-    { difficutly : Difficulty
+    { difficulty : Difficulty
     , maxPoint : Int
     , currentTurn : Int
     , maxTurn : Int
@@ -34,6 +34,11 @@ tick : Info -> Info
 tick info =
     { info | currentTime = info.currentTime + 1 }
 
+        
+isTimeOver: Info -> Bool
+isTimeOver info =
+    info.currentTime >= info.maxTime
+        
 
 next : Info -> Info
 next info =
@@ -41,11 +46,11 @@ next info =
         | currentTime = 0
         , currentTurn = info.currentTurn + 1
     }
-
-
+    
+    
 isWon : Int -> Info -> Bool
-isWon goal info =
-    goal >= info.maxPoint
+isWon point info =
+    point >= info.maxPoint
 
 
 

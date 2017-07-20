@@ -35,6 +35,27 @@ tickTest =
         ]
 
 
+isTimeOverTest =
+    describe "isTimeOver"
+        [ let
+            infoInput =
+                Info Easy 0 0 0 0 1
+          in
+            test "output is False when input is infoInput" <|
+                \() ->
+                    isTimeOver infoInput |> Expect.equal False
+        , let
+            infoInput =
+                Info Easy 0 0 0 2 1
+          in
+            test "output is True when input is infoInput" <|
+                \() ->
+                    isTimeOver infoInput |> Expect.equal True
+        ]
+
+
+
+        
 nextTest =
     describe "next"
         [ let
@@ -93,6 +114,7 @@ main =
         describe "InfoModule"
             [ resetTest
             , tickTest
+            , isTimeOverTest
             , nextTest
             , isWonTest
             , isLostTest
