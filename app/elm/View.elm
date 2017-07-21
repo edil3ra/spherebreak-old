@@ -5,7 +5,8 @@ import Init exposing (Model, Msg)
 import Info exposing (Difficulty(..))
 import Html
 import Html exposing (div, text)
-import Html.Events exposing (onClick)
+import Svg
+import Svg.Attributes
 import Coins
 import Coin
 import Init exposing (Msg(..))
@@ -35,8 +36,7 @@ type alias CoinInfo =
     , clickMsg : Msg
     , x : Int
     , y : Int
-    , width : Int
-    , height : Int
+    , size : Int
     , fill : String
     }
 
@@ -48,68 +48,40 @@ type alias CoinsInfo =
 type alias BoardInfo =
     { width : Int
     , height : Int
+    , fill : String
     , coinsInfo : CoinsInfo
     }
 
 
-toCoinInfo : Int -> Coin.Coin -> CoinInfo
-toCoinInfo index coin =
+coinPositions : Array.Array ( Int, Int )
+coinPositions =
     let
-        value =
-            Coin.value coin |> toString
+        cores =
+            [ ( 250, 250 ) ]
 
-        msg =
-            Hit index coin
+        entries =
+            [ ( 185, 185 )
+            , ( 315, 185 )
+            , ( 185, 315 )
+            , ( 315, 315 )
+            ]
 
-        fill =
-            case coin of
-                Coin.Core core ->
-                    "red"
-
-                Coin.Entry entry ->
-                    "blue"
-
-                Coin.Border border ->
-                    "green"
-
-        width =
-            case coin of
-                Coin.Core core ->
-                    25
-
-                Coin.Entry entry ->
-                    50
-
-                Coin.Border border ->
-                    40
-
-        height =
-            case coin of
-                Coin.Core core ->
-                    25
-
-                Coin.Entry entry ->
-                    50
-
-                Coin.Border border ->
-                    40
-
-        ( x, y ) =
-            Array.get index coinPositions
+        borders =
+            [ ( 63, 63 )
+            , ( 188, 63 )
+            , ( 313, 63 )
+            , ( 438, 63 )
+            , ( 438, 188 )
+            , ( 438, 313 )
+            , ( 438, 438 )
+            , ( 313, 438 )
+            , ( 188, 438 )
+            , ( 63, 438 )
+            , ( 63, 313 )
+            , ( 63, 188 )
+            ]
     in
-        CoinInfo value msg 0 0 width height
-
-
-coinPositions -> Array.Array (Int, Int)
-coinPosition =
-    positions =
-        Array.fromList
-                [ ( 250, 250 )
-                , ( 150, 150 )
-                , ( 350, 150 )
-                , ( 150, 350 )
-                , ( 350, 350 )
-                ]
+        Array.fromList (cores ++ entries ++ borders)
 
 
 toGameInfo : Model -> GameInfo
@@ -162,9 +134,62 @@ toComboInfo model =
             (toString multipleFactor)
 
 
+toCoinInfo : Int -> Coin.Coin -> CoinInfo
+toCoinInfo index coin =
+    let
+        value =
+            Coin.value coin |> toString
+
+        msg =
+            Hit index coin
+
+        fill =
+            case coin of
+                Coin.Core core ->
+                    "red"
+
+                Coin.Entry entry ->
+                    "blue"
+
+                Coin.Border border ->
+                    "green"
+
+        size =
+            case coin of
+                Coin.Core core ->
+                    30
+
+                Coin.Entry entry ->
+                    50
+
+                Coin.Border border ->
+                    40
+
+        ( x, y ) =
+            Array.get index coinPositions |> Maybe.withDefault ( 0, 0 )
+    in
+        CoinInfo value msg x y size fill
+
+
 toBoardInfo : Model -> BoardInfo
-toBoardInfo board =
-    board
+toBoardInfo model =
+    let
+        width =
+            500
+
+        height =
+            500
+
+        fill =
+            "#ddd"
+
+        coinsInfo =
+            (Coins.withIndexes model.coins)
+                |> List.filter (\( index, coin ) -> Coin.alive coin)
+                |> List.map (\( index, coin ) -> toCoinInfo index coin)
+                   
+    in
+        BoardInfo width height fill coinsInfo
 
 
 view : Model -> Html.Html Msg
@@ -173,7 +198,7 @@ view model =
         []
         [ viewGameInfo (toGameInfo model)
         , viewComboInfo (toComboInfo model)
-        , text (.value (Coins.core model.coins) |> toString)
+        , viewBoardInfo (toBoardInfo model)
         ]
 
 
@@ -197,8 +222,62 @@ viewComboInfo combo =
         ]
 
 
-viewCoin : CoinInfo -> Html.Html Msg
-viewCoin coin =
-    div
-        [ onClick coin.clickMsg ]
-        [ text coin.value ]
+viewBoardInfo : BoardInfo -> Html.Html Msg
+viewBoardInfo board =
+    let
+        width =
+            board.width |> toString
+
+        height =
+            board.height |> toString
+
+        fill =
+            board.fill
+
+        coinsInfoCsv =
+            List.map viewCoinInfo board.coinsInfo
+    in
+        Svg.svg
+            [ Svg.Attributes.width width, Svg.Attributes.height height, Svg.Attributes.fill fill ]
+            coinsInfoCsv
+
+
+viewCoinInfo : CoinInfo -> Svg.Svg Msg
+viewCoinInfo coin =
+    let
+        x =
+            coin.x |> toString
+
+        y =
+            coin.y |> toString
+
+        size =
+            coin.size |> toString
+
+        fill =
+            coin.fill
+
+        msg =
+            coin.clickMsg
+
+        value =
+            coin.value
+    in
+        Svg.g
+            []
+            [ Svg.circle
+                [ Svg.Attributes.r size
+                , Svg.Attributes.cx x
+                , Svg.Attributes.cy y
+                , Svg.Attributes.fill fill
+                ]
+                []
+            , Svg.text_
+                [ Svg.Attributes.x x
+                , Svg.Attributes.y y
+                , Svg.Attributes.dy "7"
+                , Svg.Attributes.textAnchor "middle"
+                , Svg.Attributes.fontSize "25px"
+                ]
+                [ Svg.text value ]
+            ]

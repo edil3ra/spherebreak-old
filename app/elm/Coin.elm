@@ -171,8 +171,6 @@ reset value coin =
                 
         Entry entry ->
             Entry entry
-                |> set value
-                |> Result.withDefault coin
                 |> unhit
 
         Border border ->

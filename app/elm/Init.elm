@@ -28,10 +28,12 @@ type Msg
 initCoins : Coins.Coins
 initCoins =
     [ Coin.Core (Coin.CoreCoin 0)
-    , Coin.Entry (Coin.EntryCoin 0 False)
-    , Coin.Entry (Coin.EntryCoin 0 False)
-    , Coin.Entry (Coin.EntryCoin 0 False)
-    , Coin.Entry (Coin.EntryCoin 0 False)
+    , Coin.Entry (Coin.EntryCoin 1 False)
+    , Coin.Entry (Coin.EntryCoin 2 False)
+    , Coin.Entry (Coin.EntryCoin 3 False)
+    , Coin.Entry (Coin.EntryCoin 4 False)
+    , Coin.Border (Coin.BorderCoin 0 False True 0)
+    , Coin.Border (Coin.BorderCoin 0 False True 0)
     , Coin.Border (Coin.BorderCoin 0 False True 0)
     , Coin.Border (Coin.BorderCoin 0 False True 0)
     , Coin.Border (Coin.BorderCoin 0 False True 0)

@@ -75,7 +75,7 @@ handleHit index coin model =
 handleNext : Model -> Model
 handleNext model =
     let
-        newSeed =3
+        newSeed =
             Random.step (Random.int 1 2) model.seed
                 |> Tuple.second
 
