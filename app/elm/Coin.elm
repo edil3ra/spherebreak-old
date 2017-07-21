@@ -18,7 +18,7 @@ min_counter =
 
 max_counter : Int
 max_counter =
-    8
+    4
 
 
 type Coin

@@ -5,6 +5,8 @@ type Difficulty
     = Easy
     | Medium
     | Hard
+    | Brutal
+    | Insane
 
 
 type alias Info =
@@ -28,6 +30,12 @@ reset difficulty =
 
         Hard ->
             Info Hard 300 0 20 0 15
+
+        Brutal ->
+            Info Brutal 300 0 20 0 10
+
+        Insane ->
+            Info Insane 500 0 30 0 8
 
 
 tick : Info -> Info

@@ -54,7 +54,7 @@ initPlayer =
 
 initInfo : Info.Info
 initInfo =
-    Info.reset Info.Hard
+    Info.reset Info.Brutal
 
 
 initModel : Model

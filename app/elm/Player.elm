@@ -126,6 +126,7 @@ next : Int -> Player -> Player
 next newGoal player =
     if (isGoalReach player) then
         player
+            |> updateCombo
             |> updatePoint
             |> \player -> { player | goal = newGoal }
             |> resetHand

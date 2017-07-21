@@ -4,9 +4,11 @@ import Array
 import Init exposing (Model, Msg)
 import Info exposing (Difficulty(..))
 import Html
-import Html exposing (div, text)
+import Html.Attributes
+import Html exposing (div, text, h2, select, option, button)
 import Svg
 import Svg.Attributes
+import Svg.Events
 import Coins
 import Coin
 import Init exposing (Msg(..))
@@ -31,6 +33,10 @@ type alias ComboInfo =
     }
 
 
+type alias ActionInfo =
+    {}
+
+
 type alias CoinInfo =
     { value : String
     , clickMsg : Msg
@@ -38,6 +44,7 @@ type alias CoinInfo =
     , y : Int
     , size : Int
     , fill : String
+    , fillOpacity : Float
     }
 
 
@@ -90,13 +97,19 @@ toGameInfo model =
         difficulty =
             case model.info.difficulty of
                 Easy ->
-                    "easy"
+                    "Easy"
 
                 Medium ->
-                    "medim"
+                    "Medim"
 
                 Hard ->
-                    "hard"
+                    "Hard"
+
+                Brutal ->
+                    "Brutal"
+
+                Insane ->
+                    "Insane"
 
         currentPoint =
             model.player.point |> toString
@@ -165,10 +178,16 @@ toCoinInfo index coin =
                 Coin.Border border ->
                     40
 
+        fillOpacity =
+            if not (Coin.isHit coin) then
+                1
+            else
+                0.4
+
         ( x, y ) =
             Array.get index coinPositions |> Maybe.withDefault ( 0, 0 )
     in
-        CoinInfo value msg x y size fill
+        CoinInfo value msg x y size fill fillOpacity
 
 
 toBoardInfo : Model -> BoardInfo
@@ -181,13 +200,12 @@ toBoardInfo model =
             500
 
         fill =
-            "#ddd"
+            "#f8f8f8"
 
         coinsInfo =
             (Coins.withIndexes model.coins)
                 |> List.filter (\( index, coin ) -> Coin.alive coin)
                 |> List.map (\( index, coin ) -> toCoinInfo index coin)
-                   
     in
         BoardInfo width height fill coinsInfo
 
@@ -195,18 +213,24 @@ toBoardInfo model =
 view : Model -> Html.Html Msg
 view model =
     div
-        []
-        [ viewGameInfo (toGameInfo model)
-        , viewComboInfo (toComboInfo model)
-        , viewBoardInfo (toBoardInfo model)
+        [ Html.Attributes.class "game" ]
+        [ div
+            [ Html.Attributes.class "panel-left" ]
+            [ viewGameInfo (toGameInfo model)
+            , viewComboInfo (toComboInfo model)
+            , viewActionsInfo {}
+            ]
+        , div [ Html.Attributes.class "board" ]
+            [ viewBoardInfo (toBoardInfo model) ]
         ]
 
 
 viewGameInfo : GameInfo -> Html.Html Msg
 viewGameInfo game =
     div
-        []
-        [ div [] [ text ("Difficulty: " ++ game.difficulty) ]
+        [ Html.Attributes.class "info" ]
+        [ h2 [] [ text "Info" ]
+        , div [] [ text ("Difficulty: " ++ game.difficulty) ]
         , div [] [ text ("Time: " ++ game.currentTime ++ " / " ++ game.maxTime) ]
         , div [] [ text ("Turn: " ++ game.currentTurn ++ " / " ++ game.maxTurn) ]
         , div [] [ text ("Point: " ++ game.currentPoint ++ " / " ++ game.maxPoint) ]
@@ -216,9 +240,39 @@ viewGameInfo game =
 viewComboInfo : ComboInfo -> Html.Html Msg
 viewComboInfo combo =
     div
-        []
-        [ div [] [ text ("Multiple: " ++ combo.multipleValue ++ " - " ++ combo.multipleFactor) ]
+        [ Html.Attributes.class "combo" ]
+        [ h2 [] [ text "Combo" ]
+        , div [] [ text ("Multiple: " ++ combo.multipleValue ++ " - " ++ combo.multipleFactor) ]
         , div [] [ text ("Sum: " ++ combo.sumValue ++ " - " ++ combo.sumFactor) ]
+        ]
+
+
+viewActionsInfo : ActionInfo -> Html.Html Msg
+viewActionsInfo actions =
+    div
+        [ Html.Attributes.class "actions" ]
+        [ h2 [] [ text "Actions" ]
+        , div []
+            [ select [ Html.Attributes.class "btn"]
+                [ option []
+                    [ text "Easy" ]
+                , option
+                    []
+                    [ text "Medium" ]
+                , option
+                    []
+                    [ text "Hard" ]
+                , option
+                    []
+                    [ text "Brutal" ]
+                , option
+                    []
+                    [ text "Insane" ]
+                ]
+            , div []
+                [ button [Html.Attributes.class "btn"] [ text "Play" ]
+                ]
+            ]
         ]
 
 
@@ -238,8 +292,17 @@ viewBoardInfo board =
             List.map viewCoinInfo board.coinsInfo
     in
         Svg.svg
-            [ Svg.Attributes.width width, Svg.Attributes.height height, Svg.Attributes.fill fill ]
-            coinsInfoCsv
+            [ Svg.Attributes.width width
+            , Svg.Attributes.height height
+            ]
+            [ Svg.rect
+                [ Svg.Attributes.width width
+                , Svg.Attributes.height height
+                , Svg.Attributes.fill fill
+                ]
+                []
+            , Svg.g [] coinsInfoCsv
+            ]
 
 
 viewCoinInfo : CoinInfo -> Svg.Svg Msg
@@ -257,6 +320,9 @@ viewCoinInfo coin =
         fill =
             coin.fill
 
+        fillOpacity =
+            coin.fillOpacity |> toString
+
         msg =
             coin.clickMsg
 
@@ -264,12 +330,15 @@ viewCoinInfo coin =
             coin.value
     in
         Svg.g
-            []
+            [ Svg.Events.onClick msg
+            , Svg.Attributes.cursor "pointer"
+            ]
             [ Svg.circle
                 [ Svg.Attributes.r size
                 , Svg.Attributes.cx x
                 , Svg.Attributes.cy y
                 , Svg.Attributes.fill fill
+                , Svg.Attributes.fillOpacity fillOpacity
                 ]
                 []
             , Svg.text_
@@ -278,6 +347,7 @@ viewCoinInfo coin =
                 , Svg.Attributes.dy "7"
                 , Svg.Attributes.textAnchor "middle"
                 , Svg.Attributes.fontSize "25px"
+                , Svg.Attributes.fill "white"
                 ]
                 [ Svg.text value ]
             ]

@@ -8927,6 +8927,34 @@ var _elm_lang$svg$Svg_Attributes$accumulate = _elm_lang$virtual_dom$VirtualDom$a
 var _elm_lang$svg$Svg_Attributes$accelerate = _elm_lang$virtual_dom$VirtualDom$attribute('accelerate');
 var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom$attribute('accent-height');
 
+var _elm_lang$svg$Svg_Events$on = _elm_lang$virtual_dom$VirtualDom$on;
+var _elm_lang$svg$Svg_Events$simpleOn = F2(
+	function (name, msg) {
+		return A2(
+			_elm_lang$svg$Svg_Events$on,
+			name,
+			_elm_lang$core$Json_Decode$succeed(msg));
+	});
+var _elm_lang$svg$Svg_Events$onBegin = _elm_lang$svg$Svg_Events$simpleOn('begin');
+var _elm_lang$svg$Svg_Events$onEnd = _elm_lang$svg$Svg_Events$simpleOn('end');
+var _elm_lang$svg$Svg_Events$onRepeat = _elm_lang$svg$Svg_Events$simpleOn('repeat');
+var _elm_lang$svg$Svg_Events$onAbort = _elm_lang$svg$Svg_Events$simpleOn('abort');
+var _elm_lang$svg$Svg_Events$onError = _elm_lang$svg$Svg_Events$simpleOn('error');
+var _elm_lang$svg$Svg_Events$onResize = _elm_lang$svg$Svg_Events$simpleOn('resize');
+var _elm_lang$svg$Svg_Events$onScroll = _elm_lang$svg$Svg_Events$simpleOn('scroll');
+var _elm_lang$svg$Svg_Events$onLoad = _elm_lang$svg$Svg_Events$simpleOn('load');
+var _elm_lang$svg$Svg_Events$onUnload = _elm_lang$svg$Svg_Events$simpleOn('unload');
+var _elm_lang$svg$Svg_Events$onZoom = _elm_lang$svg$Svg_Events$simpleOn('zoom');
+var _elm_lang$svg$Svg_Events$onActivate = _elm_lang$svg$Svg_Events$simpleOn('activate');
+var _elm_lang$svg$Svg_Events$onClick = _elm_lang$svg$Svg_Events$simpleOn('click');
+var _elm_lang$svg$Svg_Events$onFocusIn = _elm_lang$svg$Svg_Events$simpleOn('focusin');
+var _elm_lang$svg$Svg_Events$onFocusOut = _elm_lang$svg$Svg_Events$simpleOn('focusout');
+var _elm_lang$svg$Svg_Events$onMouseDown = _elm_lang$svg$Svg_Events$simpleOn('mousedown');
+var _elm_lang$svg$Svg_Events$onMouseMove = _elm_lang$svg$Svg_Events$simpleOn('mousemove');
+var _elm_lang$svg$Svg_Events$onMouseOut = _elm_lang$svg$Svg_Events$simpleOn('mouseout');
+var _elm_lang$svg$Svg_Events$onMouseOver = _elm_lang$svg$Svg_Events$simpleOn('mouseover');
+var _elm_lang$svg$Svg_Events$onMouseUp = _elm_lang$svg$Svg_Events$simpleOn('mouseup');
+
 var _user$project$Coin$isHit = function (coin) {
 	var _p0 = coin;
 	switch (_p0.ctor) {
@@ -8986,7 +9014,7 @@ var _user$project$Coin$value = function (coin) {
 			}(_p3._0);
 	}
 };
-var _user$project$Coin$max_counter = 8;
+var _user$project$Coin$max_counter = 4;
 var _user$project$Coin$min_counter = 0;
 var _user$project$Coin$max_value = 9;
 var _user$project$Coin$min_value = 1;
@@ -9338,6 +9366,8 @@ var _user$project$Info$Info = F6(
 	function (a, b, c, d, e, f) {
 		return {difficulty: a, maxPoint: b, currentTurn: c, maxTurn: d, currentTime: e, maxTime: f};
 	});
+var _user$project$Info$Insane = {ctor: 'Insane'};
+var _user$project$Info$Brutal = {ctor: 'Brutal'};
 var _user$project$Info$Hard = {ctor: 'Hard'};
 var _user$project$Info$Medium = {ctor: 'Medium'};
 var _user$project$Info$Easy = {ctor: 'Easy'};
@@ -9348,8 +9378,12 @@ var _user$project$Info$reset = function (difficulty) {
 			return A6(_user$project$Info$Info, _user$project$Info$Easy, 100, 0, 30, 0, 60);
 		case 'Medium':
 			return A6(_user$project$Info$Info, _user$project$Info$Medium, 200, 0, 30, 0, 30);
-		default:
+		case 'Hard':
 			return A6(_user$project$Info$Info, _user$project$Info$Hard, 300, 0, 20, 0, 15);
+		case 'Brutal':
+			return A6(_user$project$Info$Info, _user$project$Info$Brutal, 300, 0, 20, 0, 10);
+		default:
+			return A6(_user$project$Info$Info, _user$project$Info$Insane, 500, 0, 30, 0, 8);
 	}
 };
 
@@ -9431,7 +9465,8 @@ var _user$project$Player$next = F2(
 					player,
 					{goal: newGoal}));
 		}(
-			_user$project$Player$updatePoint(player)) : function (player) {
+			_user$project$Player$updatePoint(
+				_user$project$Player$updateCombo(player))) : function (player) {
 			return _user$project$Player$resetHand(
 				_elm_lang$core$Native_Utils.update(
 					player,
@@ -9462,7 +9497,7 @@ var _user$project$Player$reset = F2(
 			{ctor: '_Tuple2', _0: 0, _1: 0});
 	});
 
-var _user$project$Init$initInfo = _user$project$Info$reset(_user$project$Info$Hard);
+var _user$project$Init$initInfo = _user$project$Info$reset(_user$project$Info$Brutal);
 var _user$project$Init$initPlayer = A5(
 	_user$project$Player$Player,
 	{ctor: '[]'},
@@ -9604,13 +9639,22 @@ var _user$project$Init$Noop = {ctor: 'Noop'};
 var _user$project$View$viewCoinInfo = function (coin) {
 	var value = coin.value;
 	var msg = coin.clickMsg;
+	var fillOpacity = _elm_lang$core$Basics$toString(coin.fillOpacity);
 	var fill = coin.fill;
 	var size = _elm_lang$core$Basics$toString(coin.size);
 	var y = _elm_lang$core$Basics$toString(coin.y);
 	var x = _elm_lang$core$Basics$toString(coin.x);
 	return A2(
 		_elm_lang$svg$Svg$g,
-		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$svg$Svg_Events$onClick(msg),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$cursor('pointer'),
+				_1: {ctor: '[]'}
+			}
+		},
 		{
 			ctor: '::',
 			_0: A2(
@@ -9627,7 +9671,11 @@ var _user$project$View$viewCoinInfo = function (coin) {
 							_1: {
 								ctor: '::',
 								_0: _elm_lang$svg$Svg_Attributes$fill(fill),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$fillOpacity(fillOpacity),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
 					}
@@ -9680,14 +9728,36 @@ var _user$project$View$viewBoardInfo = function (board) {
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$svg$Svg_Attributes$height(height),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$fill(fill),
-					_1: {ctor: '[]'}
-				}
+				_1: {ctor: '[]'}
 			}
 		},
-		coinsInfoCsv);
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$svg$Svg$rect,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$width(width),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$height(height),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$fill(fill),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$g,
+					{ctor: '[]'},
+					coinsInfoCsv),
+				_1: {ctor: '[]'}
+			}
+		});
 };
 var _user$project$View$viewComboInfo = function (combo) {
 	return A2(
@@ -9899,8 +9969,12 @@ var _user$project$View$toGameInfo = function (model) {
 				return 'easy';
 			case 'Medium':
 				return 'medim';
-			default:
+			case 'Hard':
 				return 'hard';
+			case 'Brutal':
+				return 'brutal';
+			default:
+				return 'insane';
 		}
 	}();
 	return A7(_user$project$View$GameInfo, difficulty, currentPoint, currentTurn, currentTime, maxPoint, maxTurn, maxTime);
@@ -9923,9 +9997,9 @@ var _user$project$View$toComboInfo = function (model) {
 		_elm_lang$core$Basics$toString(multipleValue),
 		_elm_lang$core$Basics$toString(multipleFactor));
 };
-var _user$project$View$CoinInfo = F6(
-	function (a, b, c, d, e, f) {
-		return {value: a, clickMsg: b, x: c, y: d, size: e, fill: f};
+var _user$project$View$CoinInfo = F7(
+	function (a, b, c, d, e, f, g) {
+		return {value: a, clickMsg: b, x: c, y: d, size: e, fill: f, fillOpacity: g};
 	});
 var _user$project$View$toCoinInfo = F2(
 	function (index, coin) {
@@ -9935,6 +10009,7 @@ var _user$project$View$toCoinInfo = F2(
 			A2(_elm_lang$core$Array$get, index, _user$project$View$coinPositions));
 		var x = _p3._0;
 		var y = _p3._1;
+		var fillOpacity = (!_user$project$Coin$isHit(coin)) ? 1 : 0.4;
 		var size = function () {
 			var _p4 = coin;
 			switch (_p4.ctor) {
@@ -9960,7 +10035,7 @@ var _user$project$View$toCoinInfo = F2(
 		var msg = A2(_user$project$Init$Hit, index, coin);
 		var value = _elm_lang$core$Basics$toString(
 			_user$project$Coin$value(coin));
-		return A6(_user$project$View$CoinInfo, value, msg, x, y, size, fill);
+		return A7(_user$project$View$CoinInfo, value, msg, x, y, size, fill, fillOpacity);
 	});
 var _user$project$View$BoardInfo = F4(
 	function (a, b, c, d) {
@@ -9980,7 +10055,7 @@ var _user$project$View$toBoardInfo = function (model) {
 				return _user$project$Coin$alive(_p9._1);
 			},
 			_user$project$Coins$withIndexes(model.coins)));
-	var fill = '#ddd';
+	var fill = '#eee';
 	var height = 500;
 	var width = 500;
 	return A4(_user$project$View$BoardInfo, width, height, fill, coinsInfo);
