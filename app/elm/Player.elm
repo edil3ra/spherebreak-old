@@ -1,5 +1,6 @@
 module Player exposing (..)
 
+
 type alias ComboLength =
     Int
 
@@ -100,7 +101,7 @@ calculateCombo player =
             player.comboSum
 
         multiple =
-            if multipleCount == 0 then
+            if multipleLength == 0 then
                 0
             else
                 multipleLength ^ multipleCount
@@ -110,22 +111,31 @@ calculateCombo player =
     in
         multiple + sum
 
+resetCombo : Player -> Player
+resetCombo player =
+    {player | comboSum = (0, 0), comboMultiple = (0, 0)}
+             
+
 
 updatePoint : Player -> Player
 updatePoint player =
-    { player | point = player.point + player.goal + (calculateCombo player) }
+    { player | point = player.point + (sumHand player) + (calculateCombo player) }
 
-        
 
-next: Int -> Player -> Player
-next value player =
+next : Int -> Player -> Player
+next newGoal player =
+    if (isGoalReach player) then
         player
-            |> updateCombo
             |> updatePoint
+            |> \player -> { player | goal = newGoal }
             |> resetHand
-            |> \player -> {player | goal = value}
+    else
+        player
+            |> resetCombo 
+            |> \player -> { player | goal = newGoal }
+            |> resetHand
 
-
+               
 reset : Int -> Player -> Player
 reset value player =
-    Player [] value 0 (0, 0) (0, 0)
+    Player [] value 0 ( 0, 0 ) ( 0, 0 )

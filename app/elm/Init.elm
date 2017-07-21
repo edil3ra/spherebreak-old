@@ -18,6 +18,7 @@ type alias Model =
 type Msg
     = Noop
     | RecieveSeed Random.Seed
+    | Init Random.Seed
     | Hit Int Coin.Coin
     | Next
     | Reset
@@ -51,7 +52,7 @@ initPlayer =
 
 initInfo : Info.Info
 initInfo =
-    Info.reset Info.Easy
+    Info.reset Info.Hard
 
 
 initModel : Model
@@ -64,18 +65,22 @@ subscriptions model =
     Time.every Time.second Tick
 
 
+initSeedCmd: Cmd Msg
+initSeedCmd =
+    Random.generate
+        (\value ->  Random.initialSeed value |> Init)
+        (Random.int 2 1000)
+
 randomSeedCmd: Cmd Msg
 randomSeedCmd =
     Random.generate
-        (\value ->  Random.initialSeed value |> RecieveSeed)
-        (Random.int 0 1000)
+        (\value ->  Random.initialSeed value |> Init)
+        (Random.int 10 1000)
         
 
 
             
 init: (Model, Cmd Msg)
-init = (initModel, randomSeedCmd)
+init = (initModel, initSeedCmd)
 
 
-
-       

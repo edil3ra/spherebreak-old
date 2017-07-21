@@ -7,13 +7,17 @@ import Info
 import Coins
 import Player
 import Debug
+import Tuple
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg |> Debug.log "msg: " of
+    case msg of
         Noop ->
             ( model, Cmd.none )
+
+        Init seed ->
+            ( handleInit seed model, Cmd.none )
 
         RecieveSeed seed ->
             ( handleSeed seed model, Cmd.none )
@@ -25,7 +29,7 @@ update msg model =
             ( handleNext model, randomSeedCmd )
 
         Reset ->
-            ( model, Cmd.none )
+            ( handleReset model, Cmd.none )
 
         Tick _ ->
             ( handleTick model, Cmd.none )
@@ -34,6 +38,11 @@ update msg model =
 handleSeed : Random.Seed -> Model -> Model
 handleSeed newSeed model =
     { model | seed = newSeed }
+
+
+handleInit : Random.Seed -> Model -> Model
+handleInit newSeed model =
+    { model | seed = newSeed } |> handleReset
 
 
 handleHit : Int -> Coin.Coin -> Model -> Model
@@ -66,19 +75,22 @@ handleHit index coin model =
 handleNext : Model -> Model
 handleNext model =
     let
-        seed =
-            model.seed
+        newSeed =3
+            Random.step (Random.int 1 2) model.seed
+                |> Tuple.second
 
         newCoins =
-            Coins.next seed model.coins
+            Coins.next newSeed model.coins
 
-        coreValue =
+        newCoreValue =
             newCoins
                 |> Coins.core
                 |> .value
 
+                   
+
         newPlayer =
-            Player.next coreValue model.player
+            Player.next newCoreValue model.player
 
         newInfo =
             Info.next model.info
@@ -88,6 +100,7 @@ handleNext model =
                 | player = newPlayer
                 , coins = newCoins
                 , info = newInfo
+                , seed = newSeed
             }
 
         isWon =
@@ -146,11 +159,11 @@ handleTick model =
 
         timeOver =
             Info.isTimeOver newInfo
-                
+
         updatedModel =
-            {model | info = newInfo}
+            { model | info = newInfo }
     in
         if (not timeOver) then
-            updatedModel 
+            updatedModel
         else
             updatedModel |> handleNext

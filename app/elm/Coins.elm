@@ -5,7 +5,7 @@ import Tuple
 import Coin
 import Coin exposing (Coin(..), CoreCoin, EntryCoin, BorderCoin, min_value, max_value)
 import Random
-
+import Debug
 
 type alias EntriesCoin =
     List EntryCoin
@@ -94,11 +94,11 @@ reset seed coins =
     let
         newValuesGen : Random.Generator (List Int)
         newValuesGen =
-            Random.list (List.length coins) (Random.int min_value max_value)
-
+            Random.list ((List.length coins) + 1) (Random.int min_value max_value)
+            
         newValues : List Int
         newValues =
-            (Random.step newValuesGen seed) |> Tuple.first
+            (Random.step newValuesGen seed) |> Tuple.first |> List.drop 1
     in
         List.map2 (\coin value -> Coin.reset value coin) coins newValues
     
@@ -109,10 +109,10 @@ next seed coins =
     let
         newValuesGen : Random.Generator (List Int)
         newValuesGen =
-            Random.list (List.length coins) (Random.int min_value max_value)
-
+            Random.list ((List.length coins) + 1) (Random.int min_value max_value)
+            
         newValues : List Int
         newValues =
-            (Random.step newValuesGen seed) |> Tuple.first
+            (Random.step newValuesGen seed) |> Tuple.first |> List.drop 1
     in
         List.map2 (\coin value -> Coin.next value coin) coins newValues
