@@ -9,32 +9,34 @@
   http://finalfantasy.wikia.com/wiki/Sphere_Break
 
 ** What went right  
- + The Model and the view is well separated each view element has a mapper function with the model
- + The Coin, Coins, and Player type are well written and unit tested
- + The Update function has no side effect excepet for the first random generator that make it very easy to test
- + The application has few messages that represent the interaction with the games
+ + The model and the view are well separated.
+ + Each view element has a mapper function with the model.
+ + The Coin, Coins, and Player type are well written and unit tested.
+ + The Update function has no side effect except for the first random generator, that make it very easy to test.
+ + The application has few messages that represent the interaction with the games.
 
 ** What went wrong
-  - Bad organisation, i should have a model folder a view folder.
+  - Bad organisation, it should have a models and a views folder.
   - Probably too much code for what it does.
-  - The view function has too much code.
-  - Init module is stupid, it should has a Cmd, Sub, Message module instead.
+  - The View module has too much code.
+  - Init module is stupid.
+  - Cmd, Sub, Message, Init should have their own modules.
   
 ** What i like about elm
-  + Very easy to test
-  + Excellent typesystem
-  + Pure functional
-  + Small core of principles (you can learn it in one week if you already know functional style programming)
-  + Compilation make runtime error almost inexistant
-  + Easy to debug with Debug.log
-  + Very good package system
-  + Scalable
-  + Could replaced Angular or React
+  + Easy to test.
+  + Excellent type system.
+  + Pure functional.
+  + Small core of principles (you can learn it in one week if you already know functional style programming).
+  + Compilation make runtime error almost inexistant.
+  + Easy to debug with Debug.log.
+  + Very good package system.
+  + Scalable.
+  + Good alternative to react or angular.
   
 ** What i dislike about elm
-  - The format convention is weird for initialisation
-  - Lack of example in documentation
-  - Lack of tutorials
-  - It seem like not enougth programmer are interested in elm (it's a shame)
+  - The format convention is weird for variable initialisation.
+  - Lack of examples in the documentation.
+  - Lack of tutorials.
+  - It seem like not enougth developer are interested in elm (it's a shame).
 	
 
