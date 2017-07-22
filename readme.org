@@ -1,0 +1,40 @@
+
+
+* Spherebreak build with elm
+  https://edil3ra.github.io/games/spherebreak/
+  First project build with elm, 
+  It's a clone of the spherebreak (a mini game in final fantasy-x2 )
+  
+** Rules
+  http://finalfantasy.wikia.com/wiki/Sphere_Break
+
+** What went right  
+ + The Model and the view is well separated each view element has a mapper function with the model
+ + The Coin, Coins, and Player type are well written and unit tested
+ + The Update function has no side effect excepet for the first random generator that make it very easy to test
+ + The application has few messages that represent the interaction with the games
+
+** What went wrong
+  - Bad organisation, i should have a model folder a view folder.
+  - Probably too much code for what it does.
+  - The view function has too much code.
+  - Init module is stupid, it should has a Cmd, Sub, Message module instead.
+  
+** What i like about elm
+  + Very easy to test
+  + Excellent typesystem
+  + Pure functional
+  + Small core of principles (you can learn it in one week if you already know functional style programming)
+  + Compilation make runtime error almost inexistant
+  + Easy to debug with Debug.log
+  + Very good package system
+  + Scalable
+  + Could replaced Angular or React
+  
+** What i dislike about elm
+  - The format convention is weird for initialisation
+  - Lack of example in documentation
+  - Lack of tutorials
+  - It seem like not enougth programmer are interested in elm (it's a shame)
+	
+
