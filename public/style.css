@@ -1,0 +1,84 @@
+.game {
+    overflow: hidden;
+    margin: auto;
+    width: 800px
+}
+
+.panel-left {
+    float: left;
+    width: 250px;
+    margin-right: 20px;
+}
+
+.panel-left h2 {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.info {
+    padding: 20px;
+    background-color: #f8f8f8;
+    margin-bottom: 20px;
+}
+
+
+
+.combo {
+    padding: 20px;
+    background-color: #f8f8f8;
+    margin-bottom: 20px;
+}
+
+.actions {
+    padding: 20px;
+    background-color: #f8f8f8;
+}
+
+.actions select {
+    /* margin-bottom: 10px; */
+    margin-bottom: 64px;
+    margin-top: 10px;
+}
+
+
+
+.actions button {
+    margin-bottom: 17px;
+}
+
+option {
+    
+    background: #cf9344;
+}
+
+.btn {
+    cursor: pointer;
+    background: #cf9344;
+    background-image: -webkit-linear-gradient(top, #cf9344, #abcf70);
+    background-image: -moz-linear-gradient(top, #cf9344, #abcf70);
+    background-image: -ms-linear-gradient(top, #cf9344, #abcf70);
+    background-image: -o-linear-gradient(top, #cf9344, #abcf70);
+    background-image: linear-gradient(to bottom, #cf9344, #abcf70);
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 22px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+    border: none
+}
+
+.btn:hover {
+    /* background: #fc3ce6; */
+    /* text-decoration: none; */
+}
+
+
+.board {
+    float: right
+               width: 500px;
+    height: 500px;
+}
+
+
+/*# sourceMappingURL=style.css.map*/
