@@ -53,7 +53,7 @@ handleInit newSeed model =
 
 handleHit : Int -> Coin.Coin -> Model -> Model
 handleHit index coin model =
-    if (Coin.isHit coin) then
+    if (Coin.isHit coin) || (Coin.isCore coin) then
         model
     else
         let

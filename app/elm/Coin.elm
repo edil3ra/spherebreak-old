@@ -91,6 +91,20 @@ isHit coin =
             .hitted border
 
 
+isCore : Coin -> Bool
+isCore coin =
+    case coin of
+        Core core ->
+            True
+
+        Entry entry ->
+            False
+
+        Border border ->
+            False
+
+                
+
 set : Int -> Coin -> Result String Coin
 set x coin =
     if x < min_value then

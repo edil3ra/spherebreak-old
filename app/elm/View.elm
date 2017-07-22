@@ -269,38 +269,6 @@ viewComboInfo combo =
         ]
 
 
--- viewActionsInfo : ActionInfo -> Html.Html Msg
--- viewActionsInfo actions =
---     div
---         [ Html.Attributes.class "actions" ]
---         [ h2 [] [ text "Actions" ]
---         , div []
---             [ select [ Html.Attributes.class "btn" ]
---                 [ option
---                     []
---                     [ text "Easy" ]
---                 , option
---                     []
---                     [ text "Medium" ]
---                 , option
---                     []
---                     [ text "Hard" ]
---                 , option
---                     []
---                     [ text "Brutal" ]
---                 , option
---                     []
---                     [ text "Insane" ]
---                 ]
---             , div []
---                 [ button
---                     [ Html.Attributes.class "btn"
---                     , Html.Events.onClick actions.playMsg
---                     ]
---                     [ text "Play" ]
---                 ]
---             ]
---         ]
 
 textToDiffuclty : String -> Msg
 textToDiffuclty string =

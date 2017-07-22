@@ -9432,24 +9432,35 @@ var _user$project$Coin$isEmpty = function (coin) {
 			return _p1.hitted || (!_p1.alive);
 	}
 };
-var _user$project$Coin$isHit = function (coin) {
+var _user$project$Coin$isCore = function (coin) {
 	var _p2 = coin;
 	switch (_p2.ctor) {
+		case 'Core':
+			return true;
+		case 'Entry':
+			return false;
+		default:
+			return false;
+	}
+};
+var _user$project$Coin$isHit = function (coin) {
+	var _p3 = coin;
+	switch (_p3.ctor) {
 		case 'Core':
 			return false;
 		case 'Entry':
 			return function (_) {
 				return _.hitted;
-			}(_p2._0);
+			}(_p3._0);
 		default:
 			return function (_) {
 				return _.hitted;
-			}(_p2._0);
+			}(_p3._0);
 	}
 };
 var _user$project$Coin$counter = function (coin) {
-	var _p3 = coin;
-	switch (_p3.ctor) {
+	var _p4 = coin;
+	switch (_p4.ctor) {
 		case 'Core':
 			return _elm_lang$core$Maybe$Nothing;
 		case 'Entry':
@@ -9458,12 +9469,12 @@ var _user$project$Coin$counter = function (coin) {
 			return _elm_lang$core$Maybe$Just(
 				function (_) {
 					return _.counter;
-				}(_p3._0));
+				}(_p4._0));
 	}
 };
 var _user$project$Coin$alive = function (coin) {
-	var _p4 = coin;
-	switch (_p4.ctor) {
+	var _p5 = coin;
+	switch (_p5.ctor) {
 		case 'Core':
 			return true;
 		case 'Entry':
@@ -9471,24 +9482,24 @@ var _user$project$Coin$alive = function (coin) {
 		default:
 			return function (_) {
 				return _.alive;
-			}(_p4._0);
+			}(_p5._0);
 	}
 };
 var _user$project$Coin$value = function (coin) {
-	var _p5 = coin;
-	switch (_p5.ctor) {
+	var _p6 = coin;
+	switch (_p6.ctor) {
 		case 'Core':
 			return function (_) {
 				return _.value;
-			}(_p5._0);
+			}(_p6._0);
 		case 'Entry':
 			return function (_) {
 				return _.value;
-			}(_p5._0);
+			}(_p6._0);
 		default:
 			return function (_) {
 				return _.value;
-			}(_p5._0);
+			}(_p6._0);
 	}
 };
 var _user$project$Coin$max_counter = 4;
@@ -9531,45 +9542,31 @@ var _user$project$Coin$set = F2(
 						'x must be < ',
 						_elm_lang$core$Basics$toString(_user$project$Coin$max_value)));
 			} else {
-				var _p6 = coin;
-				switch (_p6.ctor) {
+				var _p7 = coin;
+				switch (_p7.ctor) {
 					case 'Core':
 						return _elm_lang$core$Result$Ok(
 							_user$project$Coin$Core(
 								_elm_lang$core$Native_Utils.update(
-									_p6._0,
+									_p7._0,
 									{value: x})));
 					case 'Entry':
 						return _elm_lang$core$Result$Ok(
 							_user$project$Coin$Entry(
 								_elm_lang$core$Native_Utils.update(
-									_p6._0,
+									_p7._0,
 									{value: x})));
 					default:
 						return _elm_lang$core$Result$Ok(
 							_user$project$Coin$Border(
 								_elm_lang$core$Native_Utils.update(
-									_p6._0,
+									_p7._0,
 									{value: x})));
 				}
 			}
 		}
 	});
 var _user$project$Coin$kill = function (coin) {
-	var _p7 = coin;
-	switch (_p7.ctor) {
-		case 'Core':
-			return _user$project$Coin$Core(_p7._0);
-		case 'Entry':
-			return _user$project$Coin$Entry(_p7._0);
-		default:
-			return _user$project$Coin$Border(
-				_elm_lang$core$Native_Utils.update(
-					_p7._0,
-					{alive: false}));
-	}
-};
-var _user$project$Coin$revive = function (coin) {
 	var _p8 = coin;
 	switch (_p8.ctor) {
 		case 'Core':
@@ -9580,27 +9577,24 @@ var _user$project$Coin$revive = function (coin) {
 			return _user$project$Coin$Border(
 				_elm_lang$core$Native_Utils.update(
 					_p8._0,
-					{alive: true}));
+					{alive: false}));
 	}
 };
-var _user$project$Coin$hit = function (coin) {
+var _user$project$Coin$revive = function (coin) {
 	var _p9 = coin;
 	switch (_p9.ctor) {
 		case 'Core':
 			return _user$project$Coin$Core(_p9._0);
 		case 'Entry':
-			return _user$project$Coin$Entry(
-				_elm_lang$core$Native_Utils.update(
-					_p9._0,
-					{hitted: true}));
+			return _user$project$Coin$Entry(_p9._0);
 		default:
 			return _user$project$Coin$Border(
 				_elm_lang$core$Native_Utils.update(
 					_p9._0,
-					{hitted: true}));
+					{alive: true}));
 	}
 };
-var _user$project$Coin$unhit = function (coin) {
+var _user$project$Coin$hit = function (coin) {
 	var _p10 = coin;
 	switch (_p10.ctor) {
 		case 'Core':
@@ -9609,47 +9603,32 @@ var _user$project$Coin$unhit = function (coin) {
 			return _user$project$Coin$Entry(
 				_elm_lang$core$Native_Utils.update(
 					_p10._0,
-					{hitted: false}));
+					{hitted: true}));
 		default:
 			return _user$project$Coin$Border(
 				_elm_lang$core$Native_Utils.update(
 					_p10._0,
+					{hitted: true}));
+	}
+};
+var _user$project$Coin$unhit = function (coin) {
+	var _p11 = coin;
+	switch (_p11.ctor) {
+		case 'Core':
+			return _user$project$Coin$Core(_p11._0);
+		case 'Entry':
+			return _user$project$Coin$Entry(
+				_elm_lang$core$Native_Utils.update(
+					_p11._0,
+					{hitted: false}));
+		default:
+			return _user$project$Coin$Border(
+				_elm_lang$core$Native_Utils.update(
+					_p11._0,
 					{hitted: false}));
 	}
 };
 var _user$project$Coin$reset = F2(
-	function (value, coin) {
-		var _p11 = coin;
-		switch (_p11.ctor) {
-			case 'Core':
-				return A2(
-					_elm_lang$core$Result$withDefault,
-					coin,
-					A2(
-						_user$project$Coin$set,
-						value,
-						_user$project$Coin$Core(_p11._0)));
-			case 'Entry':
-				return _user$project$Coin$unhit(
-					_user$project$Coin$Entry(_p11._0));
-			default:
-				return _user$project$Coin$revive(
-					_user$project$Coin$unhit(
-						A2(
-							_elm_lang$core$Result$withDefault,
-							coin,
-							A2(
-								_user$project$Coin$set,
-								value,
-								_user$project$Coin$Border(
-									function (border) {
-										return _elm_lang$core$Native_Utils.update(
-											border,
-											{counter: _user$project$Coin$min_counter});
-									}(_p11._0))))));
-		}
-	});
-var _user$project$Coin$next = F2(
 	function (value, coin) {
 		var _p12 = coin;
 		switch (_p12.ctor) {
@@ -9665,7 +9644,39 @@ var _user$project$Coin$next = F2(
 				return _user$project$Coin$unhit(
 					_user$project$Coin$Entry(_p12._0));
 			default:
-				var _p13 = _p12._0;
+				return _user$project$Coin$revive(
+					_user$project$Coin$unhit(
+						A2(
+							_elm_lang$core$Result$withDefault,
+							coin,
+							A2(
+								_user$project$Coin$set,
+								value,
+								_user$project$Coin$Border(
+									function (border) {
+										return _elm_lang$core$Native_Utils.update(
+											border,
+											{counter: _user$project$Coin$min_counter});
+									}(_p12._0))))));
+		}
+	});
+var _user$project$Coin$next = F2(
+	function (value, coin) {
+		var _p13 = coin;
+		switch (_p13.ctor) {
+			case 'Core':
+				return A2(
+					_elm_lang$core$Result$withDefault,
+					coin,
+					A2(
+						_user$project$Coin$set,
+						value,
+						_user$project$Coin$Core(_p13._0)));
+			case 'Entry':
+				return _user$project$Coin$unhit(
+					_user$project$Coin$Entry(_p13._0));
+			default:
+				var _p14 = _p13._0;
 				var incValue = function (border) {
 					return _elm_lang$core$Native_Utils.update(
 						border,
@@ -9681,10 +9692,10 @@ var _user$project$Coin$next = F2(
 						border,
 						{counter: _user$project$Coin$min_counter});
 				};
-				var isHit = _p13.hitted;
-				var isToBig = _elm_lang$core$Native_Utils.cmp(_p13.value + 1, _user$project$Coin$max_value) > 0;
-				var isCounterOver = _elm_lang$core$Native_Utils.cmp(_p13.counter + 1, _user$project$Coin$max_counter) > -1;
-				var isDead = !_p13.alive;
+				var isHit = _p14.hitted;
+				var isToBig = _elm_lang$core$Native_Utils.cmp(_p14.value + 1, _user$project$Coin$max_value) > 0;
+				var isCounterOver = _elm_lang$core$Native_Utils.cmp(_p14.counter + 1, _user$project$Coin$max_counter) > -1;
+				var isDead = !_p14.alive;
 				return isDead ? (isCounterOver ? A2(
 					_elm_lang$core$Result$withDefault,
 					coin,
@@ -9694,11 +9705,11 @@ var _user$project$Coin$next = F2(
 						_user$project$Coin$revive(
 							_user$project$Coin$unhit(
 								_user$project$Coin$Border(
-									resetCounter(_p13)))))) : _user$project$Coin$Border(
-					incCounter(_p13))) : ((isToBig || isHit) ? _user$project$Coin$kill(
+									resetCounter(_p14)))))) : _user$project$Coin$Border(
+					incCounter(_p14))) : ((isToBig || isHit) ? _user$project$Coin$kill(
 					_user$project$Coin$unhit(
-						_user$project$Coin$Border(_p13))) : _user$project$Coin$Border(
-					incValue(_p13)));
+						_user$project$Coin$Border(_p14))) : _user$project$Coin$Border(
+					incValue(_p14)));
 		}
 	});
 
@@ -10806,7 +10817,7 @@ var _user$project$Update$handleTick = function (model) {
 };
 var _user$project$Update$handleHit = F3(
 	function (index, coin, model) {
-		if (_user$project$Coin$isHit(coin)) {
+		if (_user$project$Coin$isHit(coin) || _user$project$Coin$isCore(coin)) {
 			return model;
 		} else {
 			var newPlayer = A2(
