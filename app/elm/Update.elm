@@ -1,12 +1,12 @@
 module Update exposing (..)
 
+import Debug
 import Random
 import Init exposing (Msg(..), Model, randomSeedCmd)
 import Coin
 import Info
 import Coins
 import Player
-import Debug
 import Tuple
 
 
@@ -30,6 +30,12 @@ update msg model =
 
         Reset ->
             ( handleReset model, Cmd.none )
+
+        Play ->
+            ( handlePlay model, Cmd.none )
+
+        ChangeDifficulty difficulty ->
+            ( handleDifficulty difficulty model, Cmd.none )
 
         Tick _ ->
             ( handleTick model, Cmd.none )
@@ -63,10 +69,15 @@ handleHit index coin model =
             goalReach =
                 Player.isGoalReach newPlayer
 
+            isEmpty =
+                List.all (\coin -> Coin.isEmpty coin) newCoins
+
             updatedModel =
                 { model | coins = newCoins, player = newPlayer }
         in
-            if (not goalReach) then
+            if isEmpty then
+                updatedModel |> handleNext
+            else if (not goalReach) then
                 updatedModel
             else
                 updatedModel |> handleNext
@@ -86,8 +97,6 @@ handleNext model =
             newCoins
                 |> Coins.core
                 |> .value
-
-                   
 
         newPlayer =
             Player.next newCoreValue model.player
@@ -167,3 +176,27 @@ handleTick model =
             updatedModel
         else
             updatedModel |> handleNext
+
+
+handleDifficulty : Info.Difficulty -> Model -> Model
+handleDifficulty difficulty model =
+    let
+        oldInfo =
+            model.info
+
+        newInfo =
+            { oldInfo | difficulty = difficulty }
+    in
+        { model | info = newInfo } |> handlePlay
+
+
+handlePlay : Model -> Model
+handlePlay model =
+    let
+        newInfo =
+            Info.reset model.info.difficulty
+
+        resetModel =
+            handleReset model
+    in
+        { resetModel | info = newInfo }

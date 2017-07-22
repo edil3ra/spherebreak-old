@@ -3,7 +3,7 @@ module Init exposing (..)
 import Coins
 import Coin
 import Player
-import Info
+import Info exposing (Difficulty(..) )
 import Random
 import Time
 
@@ -20,8 +20,10 @@ type Msg
     | RecieveSeed Random.Seed
     | Init Random.Seed
     | Hit Int Coin.Coin
+    | ChangeDifficulty Difficulty
     | Next
     | Reset
+    | Play
     | Tick Time.Time
 
 
@@ -54,7 +56,7 @@ initPlayer =
 
 initInfo : Info.Info
 initInfo =
-    Info.reset Info.Brutal
+    Info.reset Info.Easy
 
 
 initModel : Model

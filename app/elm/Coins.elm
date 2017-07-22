@@ -123,3 +123,5 @@ next seed coins =
             (Random.step newValuesGen seed) |> Tuple.first |> List.drop 1
     in
         List.map2 (\coin value -> Coin.next value coin) coins newValues
+
+

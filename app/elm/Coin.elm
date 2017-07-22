@@ -161,6 +161,19 @@ unhit coin =
             Border { border | hitted = False }
 
 
+isEmpty : Coin -> Bool
+isEmpty coin =
+    case coin of
+        Core core ->
+            True
+
+        Entry entry ->
+            entry.hitted
+
+        Border border ->
+            border.hitted || (not border.alive)
+                
+                
 reset: Int -> Coin -> Coin
 reset value coin =
     case coin of

@@ -6,6 +6,7 @@ import Info exposing (Difficulty(..))
 import Html
 import Html.Attributes
 import Html exposing (div, text, h2, select, option, button)
+import Html.Events
 import Svg
 import Svg.Attributes
 import Svg.Events
@@ -34,7 +35,9 @@ type alias ComboInfo =
 
 
 type alias ActionInfo =
-    {}
+    { options : List String  
+    , buttonMsg : Msg
+    }
 
 
 type alias CoinInfo =
@@ -100,7 +103,7 @@ toGameInfo model =
                     "Easy"
 
                 Medium ->
-                    "Medim"
+                    "Medium"
 
                 Hard ->
                     "Hard"
@@ -145,6 +148,25 @@ toComboInfo model =
             (toString sumFactor)
             (toString multipleValue)
             (toString multipleFactor)
+
+
+toActionInfo : Model -> ActionInfo
+toActionInfo model =
+    let
+        options =
+            [ "Easy" 
+            , "Medium"
+            , "Hard"
+            , "Brutal"
+            , "Insane"
+            ]
+
+                
+        buttonMsg =
+            Play
+                
+    in
+        ActionInfo options buttonMsg
 
 
 toCoinInfo : Int -> Coin.Coin -> CoinInfo
@@ -218,7 +240,7 @@ view model =
             [ Html.Attributes.class "panel-left" ]
             [ viewGameInfo (toGameInfo model)
             , viewComboInfo (toComboInfo model)
-            , viewActionsInfo {}
+            , viewActionsInfo (toActionInfo model)
             ]
         , div [ Html.Attributes.class "board" ]
             [ viewBoardInfo (toBoardInfo model) ]
@@ -247,33 +269,85 @@ viewComboInfo combo =
         ]
 
 
+-- viewActionsInfo : ActionInfo -> Html.Html Msg
+-- viewActionsInfo actions =
+--     div
+--         [ Html.Attributes.class "actions" ]
+--         [ h2 [] [ text "Actions" ]
+--         , div []
+--             [ select [ Html.Attributes.class "btn" ]
+--                 [ option
+--                     []
+--                     [ text "Easy" ]
+--                 , option
+--                     []
+--                     [ text "Medium" ]
+--                 , option
+--                     []
+--                     [ text "Hard" ]
+--                 , option
+--                     []
+--                     [ text "Brutal" ]
+--                 , option
+--                     []
+--                     [ text "Insane" ]
+--                 ]
+--             , div []
+--                 [ button
+--                     [ Html.Attributes.class "btn"
+--                     , Html.Events.onClick actions.playMsg
+--                     ]
+--                     [ text "Play" ]
+--                 ]
+--             ]
+--         ]
+
+textToDiffuclty : String -> Msg
+textToDiffuclty string =
+    case string of
+        "Easy" ->
+            ChangeDifficulty Easy
+                
+        "Medium" ->
+            ChangeDifficulty Medium
+                
+        "Hard" ->
+            ChangeDifficulty Hard
+                
+        "Brutal" ->
+            ChangeDifficulty Brutal
+                
+        "Insane" ->
+            ChangeDifficulty Insane
+                
+        _ ->
+            ChangeDifficulty Easy
+                
+        
+    
+
 viewActionsInfo : ActionInfo -> Html.Html Msg
 viewActionsInfo actions =
     div
         [ Html.Attributes.class "actions" ]
         [ h2 [] [ text "Actions" ]
         , div []
-            [ select [ Html.Attributes.class "btn"]
-                [ option []
-                    [ text "Easy" ]
-                , option
-                    []
-                    [ text "Medium" ]
-                , option
-                    []
-                    [ text "Hard" ]
-                , option
-                    []
-                    [ text "Brutal" ]
-                , option
-                    []
-                    [ text "Insane" ]
-                ]
+            [ select
+                  [ Html.Attributes.class "btn"
+                  , Html.Events.onInput textToDiffuclty
+                  ] 
+                  (actions.options
+                  |> List.map (\s -> option [Html.Attributes.value s] [text s ]))
             , div []
-                [ button [Html.Attributes.class "btn"] [ text "Play" ]
+                [ -- button
+                  --   [ Html.Attributes.class "btn"
+                  --   , Html.Events.onClick actions.buttonMsg
+                  --   ]
+                  --   [ text "Play" ]
                 ]
             ]
         ]
+        
 
 
 viewBoardInfo : BoardInfo -> Html.Html Msg

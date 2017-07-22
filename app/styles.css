@@ -36,16 +36,17 @@
 }
 
 .actions select {
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
+    margin-bottom: 64px;
+    margin-top: 10px;
 }
 
-.actions select {
-    margin-bottom: 10px;
-}
+
 
 .actions button {
     margin-bottom: 17px;
 }
+
 option {
     
     background: #cf9344;
